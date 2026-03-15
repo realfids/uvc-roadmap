@@ -1,0 +1,106 @@
+
+================================================================================
+INTERCEPT MONTE CARLO SIMULATION — EVIDENCE-CALIBRATED SROI REPORT
+Open Philanthropy Cost-Effectiveness Analysis | March 2026
+Evidence base: karim-brohi/ 8-priority literature review
+
+INVESTMENT PROFILE
+  Program cost: $40-120M (modal $60M; incl. OoC platform + trial co-funding)
+  DALY value:   $50k-150k (Open Philanthropy benchmark ~$100k)
+  Threshold:    2,100× ROI
+  Simulations:  100,000
+
+KEY MODEL CHANGES FROM BASELINE (evidence-driven):
+
+  1. GLOBAL DALYS: Median lowered 70M → 55M
+     Stroke IRI EXCLUDED — A2AR antagonism (not agonism) neuroprotective in cerebral IRI
+     (Mohamed 2016, PMID 26642806). Three remaining pools: trauma/HS (~40-60M),
+     post-cardiac arrest ECPR (~3-8M), DCD transplant IRI (~1-3M).
+
+  2. P(SUCCESS) SPLIT INTO TWO EVIDENCE-GROUNDED STAGES:
+     Stage 1 — P(platform builds + validates A2A agonism):
+       Beta(7,4) → mode 67%, mean 64%
+       Evidence: Emulate Liver-Chip 87%/100% DILI prediction (Ewart 2022, PMC9727064);
+       kidney chip adenosine renal IRI protection (Vormann 2022); first OoC IND (2025);
+       FDA ISTAND OoC submission accepted Sept 2024; HS digital twin validated vs
+       PROMMTT human data (Nature Comms Med, 2024).
+     Stage 2 — P(drug success | platform guidance):
+       Beta(4,9) → mode 25%, mean 31%
+       Evidence: 100% vs 40% survival porcine ECPR (Wisniewski 2024, p=0.01);
+       ReWiRe Phase 2a registered (Queen Mary, REC 19/LO/0329); A2aR-KO → worsened MOF
+       (Kelestemur 2022, PMID 36018304); BUT IRI field history: CIRCUS OR 1.04 (NEJM 2015),
+       CONDI2 HR 1.10 (Lancet 2019), >1,000 stroke drugs failed (Priority 2).
+       Synthesis assessment: 25-35% for trauma/HS (leukocyte mechanism + trauma context).
+     Combined E[P(success)] ≈ 0.64 × 0.31 ≈ 20%
+
+  3. ADDRESSABLE FRACTION: Explicit TBI exclusion filter built in (~72% eligible)
+     Brain IRI caveat: A2AR agonism CONTRAINDICATED in TBI-dominant patients (Mohamed 2016).
+     Gut non-protection noted (Haskó 2006, PMID 16484904): lung/liver/kidney protected,
+     gut not. ~80% organ-specificity factor applied.
+
+  4. ACCELERATION: Tightened Triangular(2,8,25) → (2,7,15)
+     TXA precedent: CRASH-2 (2010) → NAEMSP guideline (2024) = 14 years.
+     INTERCEPT marginal speed-up: 5-10 years (synthesis). Niche uncrowded (Priority 8):
+     DARPA Biostasis ($23M) = different mechanism, preclinical only.
+
+  5. R&D COST: Widened $40-80M → $40-120M
+     Includes OoC platform dev ($15-25M) + digital twin ($10-15M) + Phase 3 co-funding.
+
+SIMULATION RESULTS
+  Mean ROI:                   4,740×
+  Median ROI:                 3,583×
+  5th percentile:               878×
+  25th percentile:            2,048×
+  75th percentile:            6,083×
+  95th percentile:           12,563×
+
+  E[P(platform)]:            63.6%
+  E[P(drug|platform)]:       30.8%
+  E[P(success)]:             19.6%
+
+THRESHOLD EXCEEDANCE
+  P(ROI > 1,000×):      93.3%
+  P(ROI > 2,100×):      74.1%  ← Open Philanthropy bar
+  P(ROI > 5,000×):      33.7%
+  P(ROI > 10,000×):      9.1%
+
+SENSITIVITY ANALYSIS (ranked by |correlation| with ROI)
+  P(drug success | platform)                 ↑  r = +0.469
+  Acceleration years vs BAU                  ↑  r = +0.388
+  Global DALY burden (stroke excl.)          ↑  r = +0.356
+  Addressable fraction (multi-filter)        ↑  r = +0.314
+  R&D cost                                   ↓  r = -0.261
+  P(OoC/DT platform validates A2A)           ↑  r = +0.260
+  DALY value ($)                             ↑  r = +0.240
+
+SCENARIO COMPARISON (fixed-parameter point estimates)
+───────────────────────────────────────────────────────────────────────────────────────────────
+Scenario                     Annual DALYs  P(success)   Accel          ROI   Pass  Note
+───────────────────────────────────────────────────────────────────────────────────────────────
+Platform fails / BAU                1.8M         8%       3          785×      ✗  OoC fails; drug at IRI base rate without platform guidance
+Conservative                        2.8M        15%       5        3,438×      ✓  Platform works; ReWiRe 2a positive; Phase 3 lower bound
+Moderate                            4.2M        20%       7        8,820×      ✓  Synthesis estimate — trauma/HS + partial ECPR contribution
+Optimistic                          6.0M        26%       8       19,200×      ✓  Strong platform de-risking; trauma + ECPR both progress
+Transformative                      9.0M        32%      10       41,143×      ✓  TXA-equivalent global prehospital adoption; 3 indications
+
+CRITICAL RISK FACTORS (from evidence review)
+  1. Regadenoson vasodilatory effects in hypotensive trauma patients — primary Phase 2a
+     safety risk. Dose-finding (ReWiRe) will be the key data event.
+  2. IRI drug translational failure base rate is catastrophic (zero drugs on market;
+     CIRCUS, CONDI2, AMISTAD-II all negative). A2A agonists are untested, not immune.
+  3. Gut protection gap (Haskó 2006): lung/liver/kidney protected; gut NOT. Splanchnic
+     ischemia in HS may limit efficacy in some patient subgroups.
+  4. OoC-to-IRI-clinical-trial validation gap: OoC proves DILI prediction, not yet IRI
+     drug efficacy prediction. Kidney chip adenosine result is promising but not
+     clinically validated.
+  5. TBI patient exclusion required — operationalised patient selection adds trial
+     complexity and reduces enrolled population.
+
+VERDICT: STRONG CASE: High probability of meeting threshold under most scenarios.
+
+The median expected ROI of 3,583× is ABOVE the 2,100× threshold.
+The "Platform fails / BAU" scenario (ROI ~960×) illustrates that the OoC/DT platform
+is what makes INTERCEPT investment case viable — the drug alone at IRI base rates
+does not clear the threshold. The platform's de-risking function is the core SROI driver.
+
+================================================================================
