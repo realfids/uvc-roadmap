@@ -1,9 +1,13 @@
-# Priority 4: Timing Window Evidence
+# Priority 4: Trauma Mortality Timing and Therapeutic Windows
 
 *What fraction of trauma deaths occur in a treatable window? Updates addressable DALYs.*
 
 **Search Date:** March 15, 2026
-**Queries:** prehospital mortality timing, hemorrhagic shock therapeutic window, preventable trauma deaths
+**Queries executed:**
+- Query 4.1: "prehospital mortality" AND trauma AND ("time to death" OR "survival time" OR "golden hour")
+- Query 4.2: "hemorrhagic shock" AND ("therapeutic window" OR "time-sensitive" OR "intervention timing")
+- Query 4.3: trauma AND mortality AND ("preventable death" OR "potentially survivable") AND prehospital
+- Additional: "trimodal trauma death distribution"; "preventable trauma death percentage prehospital"
 
 ---
 
@@ -34,50 +38,119 @@ Retrospective autopsy analysis of 425–437 fatalities from northern California 
 
 ### Modern Revision: Bimodal or Single-Peak Distribution
 
-Multiple contemporary studies have found the 3rd peak has largely disappeared in high-income countries with advanced critical care:
+Multiple contemporary studies have found the 3rd peak has largely disappeared in high-income countries with advanced critical care. The relevant implication is that a larger share of mortality is now concentrated in the acute and early windows — which are the same windows targeted by prehospital intervention.
 
-- **Annals of Surgery (PMC2943446):** "Changing epidemiology of trauma deaths leads to a bimodal distribution" — the late peak is no longer detectable in modern trauma systems
-- **TraumaRegister DGU (PMC6386341):** German registry data confirms third peak has largely disappeared; mortality concentrated in immediate and early windows
-- **ScienceDirect (2015):** "Mortality after acute trauma: Progressive decreasing rather than a trimodal distribution"
-- **LMIC exception (PubMed 36939860):** Trimodal pattern still observed in low/middle-income countries where critical care infrastructure is lacking
+**Paper: "Changing epidemiology of trauma deaths leads to a bimodal distribution"**
+- Journal: Annals of Surgery
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC2943446/
+- Finding: The late peak is no longer detectable in modern trauma systems; mortality concentrated in immediate and early windows
+
+**Paper: "Changes in the temporal distribution of in-hospital mortality in severely injured patients — TraumaRegister DGU"**
+- Source: PMC / PLOS One — https://pmc.ncbi.nlm.nih.gov/articles/PMC6386341/
+- Finding: German registry data confirms the third peak has largely disappeared; mortality is now concentrated in the immediate and early windows
+
+**Paper: "Mortality after acute trauma: Progressive decreasing rather than a trimodal distribution"**
+- Year: 2015
+- Source: ScienceDirect — https://www.sciencedirect.com/science/article/pii/S2221618915000311
+- Finding: Confirms that modern trauma care has collapsed the classic trimodal pattern into a monotonically decreasing mortality curve
+
+**Paper: "Timing of death after traumatic injury — a contemporary assessment"**
+- Source: ScienceDirect — https://www.sciencedirect.com/science/article/abs/pii/S0022480415008707
+- Finding: Contemporary data shows mortality after acute trauma follows a progressively decreasing rather than trimodal distribution
+
+**Paper: "Tri-modal Distribution of Trauma Deaths in a Resource-Limited Setting: Perception Versus Reality"**
+- Year: 2023
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/36939860/
+- Finding: The trimodal pattern is still observed in low/middle-income countries where critical care infrastructure is lacking; the 3rd peak remains a target in global health trauma contexts; directly relevant for estimating addressable DALYs in LMICs
+
+**SROI implication:** The compression of mortality into the immediate-to-early window means the survivable fraction may be somewhat smaller than Trunkey's original ~30% estimate, but the window for intervention has also become more clearly defined and shorter. Pharmacologic extension of that window is therefore more, not less, relevant.
 
 ---
 
 ## Section 2: The Golden Hour — Evidence and Limitations
 
-### Papers Supporting Time-Sensitivity
+### 2.1 Papers Supporting Time-Sensitivity
 
-**"Relative Mortality Analysis of the 'Golden Hour': A Comprehensive Acuity Stratification Approach" (2018)**
-- PubMed: 30118362
-- Key finding: Golden hour IS significant, but **only for intermediate-acuity patients** (probability of survival 23–91%). High-acuity and low-acuity patients not affected by prehospital time.
+**Paper: "Time is the Enemy: Mortality in Trauma Patients with Hemorrhage from Torso Injury"**
+- Authors: Alarhayem et al.
+- Journal: The American Journal of Surgery, 2016
+- Sources: ScienceDirect — https://www.sciencedirect.com/science/article/abs/pii/S0002961016305542 | STRAC PDF — https://www.strac.org/wp-content/uploads/2024/02/Time_is_the_Enemy.pdf
+- Dataset: National Trauma Data Bank 2012–2014; 2,523,394 injured patients; 42,135 adult patients with torso hemorrhage (thorax/abdomen AIS) and prehospital SBP ≤110 mmHg
+- Key statistics:
+  - Overall mortality in cohort: 7.9% (3,326/42,135)
+  - Mortality risk was most pronounced within the first 30 minutes of prehospital time
+  - Risk increased monotonically with torso Abbreviated Injury Scale score
+  - Prehospital time and torso AIS were strong independent predictors of mortality (p <0.05) across all strata
+- Direct quote: "Evacuation times ≤30 min may not be realistic in rural or austere environments, directing future efforts toward therapies to increase the survival window prehospitally"
+- SROI implication: This paper directly motivates a prehospital pharmacologic approach — if transport cannot be accelerated, extending the survival window is the primary alternative
 
-**"Time is the Enemy: Mortality in Trauma Patients with Hemorrhage from Torso Injury"**
-- Authors: Alarhayem et al. | Journal: American Journal of Surgery, 2016
-- Dataset: 42,135 adult patients with torso hemorrhage (National Trauma Data Bank, 2012–2014)
-- Key finding: Mortality risk most pronounced within first 30 minutes of prehospital time; evacuation times ≤30 minutes not realistic in many settings → therapies to extend survival window needed
-- [ScienceDirect](https://www.sciencedirect.com/science/article/abs/pii/S0002961016305542)
+**Paper: "Relative Mortality Analysis of the 'Golden Hour': A Comprehensive Acuity Stratification Approach"**
+- Year: 2018
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/30118362/
+- Key finding: Prior studies failed to detect the golden hour effect not because it does not exist, but because they failed to stratify by patient acuity
+  - For lowest-acuity patients (PS >91%): prehospital time is irrelevant — likely to survive regardless
+  - For highest-acuity patients (PS <23%): prehospital time is also irrelevant — likely to die regardless
+  - **For intermediate-acuity patients (PS 23–91%): the golden hour IS significant**
+- This intermediate group is large, clinically real, and represents the primary addressable target population
 
-**"Every Minute Matters in Hemorrhagic Shock" (410 Medical White Paper)**
-- Every 1-minute increase in time to early resuscitative intervention: **+2% odds of 30-day mortality**, +1.5% odds of 24-hour mortality
-- [410medical.com](https://410medical.com/app/uploads/2023/03/Every-Minute-Matters-in-Hemorrhagic-Shock-White-Paper.pdf)
+**Paper: "Redefining the Golden Hour for Severe Head Injury in an Urban Setting"**
+- Journal: Injury, 2012
+- Source: ScienceDirect — https://www.sciencedirect.com/science/article/abs/pii/S0020138312000186
+- Key statistics:
+  - Hazard ratio 1.002 per minute of prehospital time (95% CI 1.001–1.004, p=0.001)
+  - No aggregate survival benefit observed for arrival within 60 minutes (vs. >60 min)
+  - Survival benefit specifically observed for arrival within 2 hours
+  - Rapid transport specifically beneficial for hypotensive patients and penetrating brain injury
 
-**Lamb et al. 2023 systematic review (cited in Biomedicines 2024):**
+**Paper: "Every Minute Matters in Hemorrhagic Shock" (410 Medical White Paper)**
+- Source: https://410medical.com/app/uploads/2023/03/Every-Minute-Matters-in-Hemorrhagic-Shock-White-Paper.pdf
+- Key findings:
+  - Every 1-minute increase in time to early resuscitative intervention: **+2% increase in odds of 30-day mortality**
+  - Every 1-minute increase: **+1.5% increase in odds of 24-hour mortality**
+
+**Paper: "Hemorrhage control and physiologic resuscitation are time-sensitive imperatives in multisystem trauma"**
+- Source: AAOS Now, 2025 — https://www.aaos.org/aaosnow/2025/nov/clinical/clinical01/
+- Key finding: Combat casualties who received blood products or damage control resuscitation transfer within 1 hour of injury had significantly lower mortality than those receiving care later
+
+**Lamb et al. 2023 systematic review (cited in Biomedicines 2024, Navigating Hemorrhagic Shock):**
 - 24 studies, >10,000 patients
-- **70% of studies** demonstrated significant link between delayed hemostatic intervention and increased mortality
+- **70% of studies** demonstrated a significant link between delayed hemostatic intervention and increased mortality
+- Source: https://www.mdpi.com/2227-9059/12/12/2864
 
-### Papers Challenging Universal Golden Hour
+### 2.2 Papers Challenging Universal Application of the Golden Hour
 
-**"EMS Intervals and Survival in Trauma" — Newgard et al.**
-- 146 EMS agencies, 10 North American sites
-- Finding: No statistically significant relationship between out-of-hospital time and mortality across diverse patient populations
-- [PMC3008652](https://pmc.ncbi.nlm.nih.gov/articles/PMC3008652/)
+**Paper: "Emergency Medical Services Intervals and Survival in Trauma: Assessment of the 'Golden Hour' in a North American Prospective Cohort"**
+- Authors: Newgard et al.
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC3008652/
+- Dataset: 146 EMS agencies, 10 North American sites, high-risk trauma patients with field physiologic abnormality
+- Finding: No statistically significant relationship between out-of-hospital time and mortality across diverse patient populations, trauma systems, regions, and confounders
+- Limitation: Did not stratify by patient acuity — the failure to detect the effect is explained by the Relative Mortality Analysis (2018) above
 
-**Pan-Asia Trauma Outcomes Study (PATOS) — PLOS Medicine 2020**
-- Multi-national EMS cohort, Jan 2016–Nov 2018
-- Finding: No association between prehospital time and 30-day mortality overall; but every 10-minute delay: **+6% odds of poor functional outcome**
-- [PLOS Medicine](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003360)
+**Paper: "Association between prehospital time and outcome of trauma patients in 4 Asian countries" (Pan-Asia Trauma Outcomes Study — PATOS)**
+- Journal: PLOS Medicine, 2020
+- Sources: https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003360 | PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC7537901/
+- Dataset: Multi-national retrospective cohort, January 2016–November 2018
+- Key findings:
+  - No association between prehospital time and 30-day mortality overall
+  - Every 10-minute delay was associated with a **6% increase in odds of poor functional outcome** at discharge
+  - Highlights that functional outcome may be a more sensitive endpoint than mortality alone
 
-**Synthesis:** The golden hour is real for the intermediate-acuity hemorrhagic trauma patient — which is precisely the target population for a prehospital pharmacological intervention.
+**Paper: "Does prehospital time affect survival of major trauma patients where there is no prehospital care?"**
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC5525481/
+- Finding: In-hospital mortality was associated with age, mechanism, shock, GCS <9, ISS ≥16, and need for ventilatory support — but not with prehospital time in this low-resource setting; confounding by absence of formal prehospital care limits interpretation
+
+**Paper: "Prehospital time and mortality in pediatric trauma"**
+- Journal: Pediatric Surgery International, 2024
+- Source: Springer — https://link.springer.com/article/10.1007/s00383-024-05742-9
+- Finding: Non-linear relationship — highest mortality in patients arriving in <30 minutes (reflecting appropriate triage of most critical patients), nadir at 30–45 minutes, then no further association; does not disprove time-sensitivity but shows selection bias in raw prehospital time analysis
+
+### 2.3 Synthesis: What the Golden Hour Evidence Actually Shows
+
+The conflicting literature is largely resolved by three observations:
+
+1. **Acuity stratification is essential.** The golden hour effect disappears in pooled analyses that do not separate by injury severity. It is real and significant for the intermediate-acuity hemorrhagic trauma patient (PS 23–91%).
+2. **The threshold is not exactly 60 minutes.** For some patients (severe penetrating torso trauma with hemodynamic instability) the window may close in 30 minutes; for others with slower hemorrhage it may extend beyond 2 hours.
+3. **Non-detectability of transport time effects in aggregate studies does not mean time is unimportant.** It means the effect is concentrated in a specific subpopulation. That subpopulation is exactly the one a prehospital pharmacologic intervention would target.
 
 ---
 
