@@ -154,69 +154,127 @@ The conflicting literature is largely resolved by three observations:
 
 ---
 
-## Section 3: Hemorrhagic Shock — Therapeutic Window
+## Section 3: Hemorrhagic Shock — Therapeutic Window and Time Dynamics
 
-### Median Survival Data
+### 3.1 Clinical Survival Time Data
 
-**"Traumatic hemorrhage and chain of survival" (PMC10207757)**
-- 208 trauma patients with hemorrhagic shock (SBP ≤90 mmHg):
-  - 31% died within 2 hours of ED arrival
+**Paper: "Traumatic hemorrhage and chain of survival"**
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC10207757/
+- Dataset: 208 trauma patients presenting with hemorrhagic shock (SBP ≤90 mmHg)
+- Outcomes:
+  - **31% died within 2 hours of ED arrival**
   - 12% died between 2–24 hours
   - 11% died after 24 hours
   - 46% survived
 - Overall mortality from hemorrhage-induced hypotension: **54%**
-- **Median time from onset to death: ~2 hours**
+- **Median time from onset of hemorrhagic shock to death: ~2 hours**
+- Most hemorrhagic deaths occur within the first 6 hours of hospital admission
 
-**Animal model data:**
-- Rat (uncontrolled internal hemorrhage): Average survival time 107 minutes; 12/59 rats died before 120 minutes ([PLOS One](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0080862))
-- Swine continuous hemorrhage: survival modulated by bleed rate (1.0–1.25 ml/kg/min)
+### 3.2 Preclinical Survival Time Data
 
-### Hemorrhage as a Fraction of All Trauma Deaths
+Animal models provide direct measurement of survival windows not ethically obtainable in human studies:
 
-**"Impact of Hemorrhage on Trauma Outcome" — Journal of Trauma 2006 (PubMed 16763478)**
-- Hemorrhage responsible for **30–40% of trauma mortality**
-- **33–56% of hemorrhage deaths occur in the prehospital period**
-- Autopsy review (425 consecutive injury deaths): hemorrhage caused 35.2%
+- **Rat model (uncontrolled internal hemorrhage):** Average survival time 107 minutes; 12/59 rats died before 120 minutes
+  - Source: PLOS One — https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0080862
+- **Heparinized rat hemorrhage models:** Survival time as short as 30 minutes
+- **Swine continuous hemorrhage model:** Survival time modulated by bleed rate (1.0–1.25 ml/kg/min)
+  - Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/2548273/
 
-**"Navigating Hemorrhagic Shock" — Biomedicines, December 2024**
-- Hemorrhagic shock causes ~**60,000 deaths annually** in the US
-- **~50% of deaths happen before hospital arrival**
-- [MDPI](https://www.mdpi.com/2227-9059/12/12/2864)
+These data define the pharmacological window: the survivable therapeutic window for uncontrolled hemorrhage begins closing within 30 minutes and is largely exhausted by 2 hours, consistent with clinical outcome data.
+
+### 3.3 Hemorrhage as a Fraction of All Trauma Deaths
+
+**Paper: "Impact of Hemorrhage on Trauma Outcome: An Overview of Epidemiology, Clinical Presentations, and Therapeutic Considerations"**
+- Journal: Journal of Trauma, 2006
+- Sources: LWW — https://journals.lww.com/jtrauma/fulltext/2006/06001/impact_of_hemorrhage_on_trauma_outcome__an.2.aspx | PubMed — https://pubmed.ncbi.nlm.nih.gov/16763478/
+- Key statistics:
+  - Hemorrhage responsible for **30–40% of trauma mortality**
+  - **33–56% of hemorrhage deaths occur in the prehospital period**
+  - Autopsy review of 425 consecutive injury deaths: hemorrhage caused 35.2% of deaths
+
+**Paper: "Navigating Hemorrhagic Shock: Biomarkers, Therapies, and Challenges in Clinical Care"**
+- Journal: Biomedicines, December 2024
+- Source: MDPI — https://www.mdpi.com/2227-9059/12/12/2864
+- Key statistics:
+  - Hemorrhagic shock causes approximately **60,000 deaths annually** in the US
+  - **~50% of hemorrhagic shock deaths occur before hospital arrival**
+  - Lamb et al. 2023 systematic review (24 studies, >10,000 patients): 70% of studies demonstrated significant link between delayed hemostatic intervention and increased mortality
+
+**Paper: "Epidemiology of Trauma-Related Hemorrhage and Time to Definitive Care Across North America: Making the Case for Bleeding Control Education"**
+- Year: 2023
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC10694464/
+- Key statistics:
+  - 44.9% of hemorrhage deaths classified as preventable or potentially preventable
+  - Of preventable hemorrhage deaths: **35.8% occurred prehospital**
+  - Of preventable hemorrhage deaths: additional **20.4% died within 1 hour of arriving at an acute care setting**
+  - Combined: **56.2% of preventable hemorrhage deaths** occur either prehospital or within the first hour of hospital arrival
+  - Patients experienced a median wait of 6 minutes for EMS arrival and a median of 60 minutes until reaching definitive care
+  - Patients with life-threatening hemorrhage may lose their entire circulating blood volume in under 5 minutes
 
 ---
 
-## Section 4: Military Data — Eastridge et al. 2012 (Landmark)
+## Section 4: Military Data — Eastridge et al. 2012 (Landmark Study)
 
-**"Death on the Battlefield (2001–2011): Implications for the Future of Combat Casualty Care"**
-- Authors: Eastridge et al. | JTACS 2012 (73:S431–S437)
-- Dataset: 4,574 combat deaths, 2001–2011
-- [PubMed 23192066](https://pubmed.ncbi.nlm.nih.gov/23192066/)
+**Paper: "Death on the Battlefield (2001–2011): Implications for the Future of Combat Casualty Care"**
+- Authors: Eastridge et al.
+- Journal: Journal of Trauma and Acute Care Surgery, 2012; 73(6 Suppl 5):S431–437
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/23192066/
+- Dataset: 4,574 combat deaths, Operations Iraqi Freedom and Enduring Freedom, 2001–2011
 
 | Metric | Value |
 |--------|-------|
 | Deaths before reaching medical treatment facility | **87%** |
-| Of pre-MTF deaths: non-survivable | 75.7% |
+| Of pre-MTF deaths: non-survivable | 75.7% (n=3,040) |
 | Of pre-MTF deaths: potentially survivable | **24.3% (n=976)** |
-| Of potentially survivable: due to hemorrhage | **90.9%** |
-| Lethal hemorrhage site — truncal | 67.3% |
+| Of potentially survivable deaths: due to hemorrhage | **90.9%** |
+| Lethal hemorrhage site — truncal (non-compressible) | 67.3% |
 | Lethal hemorrhage site — junctional | 19.2% |
 | Lethal hemorrhage site — extremity | 13.5% |
+| 2nd most common cause of potentially preventable death | Airway obstruction: 8% |
 
-**Eastridge 2019 synthesis:** Hemorrhage implicated in 25–30% of all injury deaths and **>80% of preventable post-injury deaths** in military and civilian settings.
+**Conclusion from Eastridge 2012:** "Most battlefield casualties died of their injuries before ever reaching a surgeon. To significantly impact the outcome of combat casualties with potentially survivable injury, strategies must be developed to mitigate hemorrhage and optimize airway management or reduce the time interval between point of injury and surgical intervention."
+
+**Related paper: "Died of wounds on the battlefield: causation and implications for improving combat casualty care"**
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/21795876/
+- Dataset: 558 combat casualties who reached a medical treatment facility but subsequently died
+- Key finding: Of 287 potentially survivable died-of-wounds casualties, **80% of mortality was directly associated with acute hemorrhage** early in the hospital course
+- DOW rate: 4.6% — strikingly similar to civilian trauma center case fatality rate of 4.1%
+
+**Paper: "Outcomes of traumatic hemorrhagic shock and the epidemiology of preventable death from injury" — Eastridge et al., 2019**
+- Journal: Transfusion, 2019
+- Sources: Wiley — https://onlinelibrary.wiley.com/doi/full/10.1111/trf.15161 | PubMed — https://pubmed.ncbi.nlm.nih.gov/30980749/
+- Synthesis finding: Hemorrhage implicated in **25–30% of all injury deaths** and **>80% of preventable post-injury deaths** in military and civilian settings combined
+- Kalkwarf et al. sub-analysis within this paper (1,848 trauma-related deaths):
+  - 305 deaths due to uncontrolled hemorrhage
+  - **45% of hemorrhage deaths were preventable or potentially preventable**
+  - 35% of those occurred in the prehospital setting
 
 ---
 
-## Section 5: Preventable Prehospital Trauma Deaths
+## Section 5: Preventable Prehospital Trauma Deaths — Civilian Epidemiology
 
-**"Are Pre-hospital Trauma Deaths Preventable?" — Pfeifer et al. 2019 (systematic review)**
-- 19 papers, 7,235 deaths, published 1990–2018
-- Pre-hospital death rate: 14.6–47.6% of all trauma deaths
-- **Definitely preventable: 4.9–11.3%**
-- **Potentially preventable: 25.8–42.7%**
-- Most common causes: delayed treatment (27–58%), management errors (40–60%), treatment errors (50–76.6%)
-- [Wiley](https://onlinelibrary.wiley.com/doi/10.1007/s00268-019-05056-1)
+**Systematic Review: "Are Pre-hospital Trauma Deaths Preventable? A Systematic Literature Review"**
+- Authors: Pfeifer et al.
+- Journal: World Journal of Surgery, 2019
+- Sources: Wiley — https://onlinelibrary.wiley.com/doi/10.1007/s00268-019-05056-1 | PubMed — https://pubmed.ncbi.nlm.nih.gov/31214829/
+- Scope: 19 papers, 7,235 deaths, published 1990–2018
+- Key statistics:
+  - Pre-hospital death rate: 14.6–47.6% of all trauma deaths (varies by system)
+  - **Definitely preventable: 4.9–11.3%** of prehospital deaths
+  - **Potentially preventable: 25.8–42.7%** of prehospital deaths
+  - Most common causes: delayed treatment (27–58%), management errors (40–60%), treatment errors (50–76.6%)
 
-**"Early and prehospital trauma deaths: Who might benefit from advanced resuscitative care?" (PubMed 32176169, 2020)**
+**Systematic Review: "Preventable death in trauma: A systematic review on definition and classification"**
+- Journal: Injury, 2021
+- Source: ScienceDirect — https://www.sciencedirect.com/science/article/pii/S0020138321006458
+- Scope: 68 selected articles from 3,614 identified; covers 1990–2021
+- Finding: Delay in treatment and treatment errors are the most consistently cited causes of trauma-related preventable death across all classification systems and study designs
+
+**Paper: "Early and prehospital trauma deaths: Who might benefit from advanced resuscitative care?"**
+- Year: 2020
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/32176169/
+- Anatomic survivability breakdown of trauma fatalities:
+
 | Category | Fraction of all trauma fatalities |
 |----------|----------------------------------|
 | Anatomically non-survivable | 73% |
@@ -224,77 +282,207 @@ The conflicting literature is largely resolved by three observations:
 | **Survivable with advanced prehospital care** | **14%** |
 | Survivable with basic prehospital care | 4% |
 
-**North America hemorrhage epidemiology (PMC10694464, 2023):**
-- 44.9% of hemorrhage deaths: preventable or potentially preventable
-- Of those: **35.8% occurred prehospital**
-- Additional 20.4% died within 1 hour of ED arrival
+- Implication: 12–18% of all trauma deaths might be prevented with field-level advanced resuscitation; in the US context (~200,000 injury deaths/year), this represents approximately 24,000–36,000 deaths/year
 
-**Bystander gap (UK data, PubMed 28262281, 2017):**
-- Bystanders present before EMS: 96% of cases
-- Bystander intervention of any kind: only **25–30%**
+**Paper: "Are prehospital deaths from trauma and accidental injury preventable? A direct historical comparison to assess what has changed in two decades"**
+- Year: 2017
+- Sources: ScienceDirect — https://www.sciencedirect.com/science/article/pii/S0020138317300608 | PubMed — https://pubmed.ncbi.nlm.nih.gov/28363752/
+- Comparison: Hussain & Redmond 1994 vs. contemporary Manchester/Cheshire data
+- Key statistics:
+  - 1994 (Hussain & Redmond): up to **39% of prehospital accidental injury deaths** potentially preventable with basic first aid
+  - 2017 study: Median ISS 27.5–29; **46–59% of deaths** had probability of survival in the preventable/potentially preventable range
+  - Bystander presence: 39–45%; bystander intervention of any kind: only **25–30%**
+  - Conclusion: The number of potentially preventable prehospital deaths remains high and largely unchanged over two decades
+
+**Paper: "Prehospital deaths from trauma: Are injuries survivable and do bystanders help?"**
+- Year: 2017
+- Sources: PubMed — https://pubmed.ncbi.nlm.nih.gov/28262281/ | ScienceDirect — https://www.sciencedirect.com/science/article/pii/S0020138317300979
+- Key statistics:
+  - Median ISS: 29
+  - **43% of deaths had probability of survival >50%**
+  - Bystanders present in 45% of cases; present before EMS in **96%** of those cases
+  - Despite near-ubiquitous bystander presence before EMS, intervention rate was only 25–30%
+  - Hemorrhage was the dominant mechanism in survivable deaths
+
+**Paper: "Bleeding to death in a big city: An analysis of all trauma deaths from hemorrhage in a metropolitan area during 1 year"**
+- Source: PubMed — https://pubmed.ncbi.nlm.nih.gov/32590562/
+- Key finding: Metropolitan analysis designated **29% of mortality as potentially preventable**; **64% of those potentially survivable deaths** attributed to hemorrhage
+
+**Paper: "The forgotten cohort — lessons learned from prehospital trauma death: a retrospective cohort study"**
+- Journal: Scandinavian Journal of Trauma, Resuscitation and Emergency Medicine, 2023
+- Source: Springer — https://link.springer.com/article/10.1186/s13049-023-01107-8
+- Key finding: Prehospital trauma deaths remain under-studied and under-resourced; hemorrhage control and airway management are the dominant addressable causes; the paper argues for systematic data collection on prehospital deaths as a precondition for improving outcomes
+
+**Paper: "Epidemiology of Prehospital and Hospital Traumatic Deaths from Life-Threatening Hemorrhage"**
+- Source: Scholars @ UT Health San Antonio — https://scholars.uthscsa.edu/en/publications/epidemiology-of-prehospital-and-hospital-traumatic-deaths-from-li/
+- Finding: Establishes the empirical split between prehospital and in-hospital hemorrhage deaths; confirms that the prehospital period is the dominant window for hemorrhage mortality
+
+**National Academies of Sciences estimate:**
+- 20% of trauma-related deaths may have been preventable with receipt of "optimal trauma care"
+- The "greatest opportunity to save lives" identified as the prehospital setting
 
 ---
 
-## Section 6: Remote Damage Control Resuscitation — Extending the Window
+## Section 6: Remote Damage Control Resuscitation — Extending the Therapeutic Window
 
-**EMS Tactical Damage Control Resuscitation Protocol (StatPearls/NCBI NBK599525)**
-- Remote Damage Control Resuscitation (RDCR), developed by THOR network
-- Applied when hospital access is delayed **>60 minutes**
-- Includes: hemorrhage control, permissive hypotension, hypothermia prevention, TXA, freeze-dried plasma
-- The 60-minute threshold is the clinical consensus on the primary death window for preventable hemorrhagic trauma deaths
+**Paper: "EMS Tactical Damage Control Resuscitation Protocol"**
+- Source: StatPearls / NCBI Bookshelf — https://www.ncbi.nlm.nih.gov/books/NBK599525/
+- Framework: Remote Damage Control Resuscitation (RDCR), developed by the Trauma Hemostasis Oxygenation Research (THOR) network
+- Definition: Formal prehospital resuscitation protocol applied when hospital access is delayed **>60 minutes**
+- Components:
+  - Mechanical hemorrhage control (tourniquet, packing, junctional compression devices)
+  - Permissive hypotension (target MAP 50–65 mmHg to avoid diluting clot)
+  - Prevention of hypothermia (one vertex of the "lethal triad": hypothermia + acidosis + coagulopathy)
+  - Blood product administration when available (tranexamic acid, freeze-dried plasma, whole blood)
+- The 60-minute threshold used to define RDCR candidacy reflects the clinical consensus on the primary death window for preventable hemorrhagic trauma deaths
+
+**Paper: "Haemorrhage control in the prehospital setting: a scoping review protocol"**
+- Source: PMC — https://pmc.ncbi.nlm.nih.gov/articles/PMC6661646/
+- Finding: Mechanical and pharmacologic hemorrhage control is feasible prehospitally; evidence base is growing but remains incomplete for pharmacologic agents beyond TXA
+
+**SROI implication:** The existence of RDCR as a formalized clinical protocol confirms that the medical community has already accepted that: (a) the 60-minute window is the critical intervention threshold, and (b) pharmacologic/resuscitative treatment in the field is both feasible and needed. An A2A agonist or similar cytoprotective agent fits naturally into the RDCR framework as an adjunct to current mechanical and volume-based approaches.
 
 ---
 
 ## Summary Statistics Table
 
-| Metric | Value | Source |
-|--------|-------|--------|
-| Immediate trauma deaths | ~50% | Trunkey 1983 |
-| Early deaths (1–4 hrs) | ~30% | Trunkey 1983 |
-| Trauma deaths due to hemorrhage | 30–40% | Eastridge 2019 |
-| Hemorrhage deaths occurring prehospital | 33–56% | J Trauma 2006 |
-| Preventable/potentially preventable hemorrhage deaths | 45% | Kalkwarf/Eastridge 2019 |
-| Of preventable hemorrhage deaths: prehospital | 35.8% | PMC 2023 |
-| Die within 1 hr of ED arrival (preventable group) | 20.4% | PMC 2023 |
-| Prehospital trauma deaths potentially preventable | 25.8–42.7% | Pfeifer et al. 2019 |
+| Metric | Statistic | Source |
+|--------|-----------|--------|
+| Immediate trauma deaths (1st peak, Trunkey model) | ~50% of all trauma deaths | Trunkey 1983 |
+| Early trauma deaths (2nd peak, 1–4 hrs) | ~30% of all trauma deaths | Trunkey 1983 |
+| Late trauma deaths (3rd peak, days–weeks) | ~20% of all trauma deaths | Trunkey 1983 |
+| 3rd peak presence in modern high-income trauma systems | Largely eliminated | TraumaRegister DGU; Annals of Surgery |
+| Trauma deaths due to hemorrhage (overall) | 30–40% | Eastridge 2019; J Trauma 2006 |
+| Hemorrhage deaths occurring in prehospital period | 33–56% | J Trauma 2006 |
+| Preventable/potentially preventable hemorrhage deaths | 45% of all hemorrhage deaths | Kalkwarf / Eastridge 2019 |
+| Of preventable hemorrhage deaths: prehospital | 35.8% | N. America Epidemiology PMC 2023 |
+| Of preventable hemorrhage deaths: die within 1 hr of ED | 20.4% | N. America Epidemiology PMC 2023 |
+| Preventable hemorrhage deaths (prehospital + within 1 hr of ED) combined | 56.2% of all PPH deaths | N. America Epidemiology PMC 2023 |
+| Prehospital trauma deaths potentially preventable (systematic review) | 25.8–42.7% | Pfeifer et al. 2019 |
+| Prehospital trauma deaths definitely preventable | 4.9–11.3% | Pfeifer et al. 2019 |
 | Military pre-MTF deaths | 87% of all combat deaths | Eastridge 2012 |
-| Potentially survivable military deaths from hemorrhage | 90.9% | Eastridge 2012 |
-| Median survival time, hemorrhagic shock | ~2 hours | PMC10207757 |
-| Shock patients dying within 2 hrs of ED arrival | 31% | PMC10207757 |
-| Each minute delay in resuscitation | +2% odds 30-day mortality | 410 Medical WP |
-| Studies showing delayed hemostasis increases mortality | 70% of 24 studies | Lamb 2023 |
-| Trauma deaths preventable with advanced prehospital care | **14% of all fatalities** | PubMed 2020 |
-| US annual hemorrhagic shock deaths | ~60,000 | Biomedicines 2024 |
-| Hemorrhage deaths before hospital arrival | ~50% | Biomedicines 2024 |
+| Military pre-MTF deaths: non-survivable | 75.7% | Eastridge 2012 |
+| Military pre-MTF deaths: potentially survivable | 24.3% (n=976) | Eastridge 2012 |
+| Of potentially survivable military deaths: hemorrhagic | 90.9% | Eastridge 2012 |
+| Lethal hemorrhage: truncal (non-compressible) | 67.3% of potentially survivable | Eastridge 2012 |
+| Hemorrhage as cause of preventable post-injury death | >80% (military + civilian) | Eastridge 2019 |
+| All trauma fatalities preventable with advanced prehospital care | 14% | PubMed 2020 |
+| All trauma fatalities preventable with basic prehospital care | 4% | PubMed 2020 |
+| Median survival time in hemorrhagic shock | ~2 hours | Traumatic hemorrhage chain of survival PMC |
+| Hemorrhagic shock patients dying within 2 hrs of ED arrival | 31% | Chain of survival PMC |
+| Overall mortality from hemorrhage-induced hypotension (SBP ≤90) | 54% | Chain of survival PMC |
+| Per-minute delay in resuscitation: odds of 30-day mortality | +2% per minute | 410 Medical white paper |
+| Per-minute delay in resuscitation: odds of 24-hr mortality | +1.5% per minute | 410 Medical white paper |
+| Studies showing delayed hemostasis increases mortality | 70% of 24 studies (Lamb 2023) | Biomedicines Dec 2024 |
+| Annual US deaths from hemorrhagic shock | ~60,000 | Biomedicines Dec 2024 |
+| Hemorrhagic shock deaths before hospital arrival | ~50% | Biomedicines Dec 2024 |
+| Bystander presence in prehospital trauma death cases | 39–45% | UK prehospital death studies |
+| Bystander presence before EMS in those cases | 96% | PubMed 28262281 |
+| Bystander intervention rate despite presence | 25–30% | UK prehospital death studies |
+| National Academies estimate: trauma deaths preventable with optimal care | 20% | National Academies report |
+
+---
+
+## Section 7: Implications for Prehospital Intervention Feasibility
+
+### 7.1 The Therapeutic Window is Narrow but Pharmacologically Actionable
+
+The median survival time in hemorrhagic shock is approximately 2 hours. Animal models confirm this window — uncontrolled hemorrhage in rodent models produces death in 30–107 minutes depending on injury severity. This 30-minute-to-2-hour window is:
+
+- Too short for hospital care in rural, austere, or low-resource settings
+- Long enough for a pharmacologic agent to achieve meaningful effect if administered immediately after injury
+- Consistent with RDCR's 60-minute threshold for defining field resuscitation candidates
+- Compatible with known pharmacokinetics of A2A agonists and similar cytoprotective agents
+
+### 7.2 A Quantifiable and Meaningful Fraction of Deaths is Addressable
+
+Across civilian studies, 25–43% of prehospital trauma deaths are classified as potentially preventable. The most conservative anatomic survivability analysis (PubMed 2020) estimates 14% of all trauma deaths are addressable specifically with advanced prehospital care. Using US injury mortality figures (~200,000 deaths/year), this represents approximately **28,000 deaths/year** in the US alone that are potentially addressable with better prehospital intervention.
+
+The military data (Eastridge 2012) place the upper bound at 24.3% of all field deaths as potentially survivable — and 90.9% of those are hemorrhagic. At the conservative lower bound, the addressable target population is still large in absolute terms.
+
+### 7.3 Hemorrhage is the Dominant and Specific Addressable Mechanism
+
+Over 80% of preventable post-injury deaths in both military and civilian contexts are hemorrhage-related (Eastridge 2019). This narrows the intervention target sharply:
+
+- Non-compressible truncal hemorrhage (67.3% of potentially survivable military deaths) cannot be addressed by mechanical means alone — it requires systemic physiologic support
+- This creates a specific unmet need for pharmacologic agents that extend tolerance for blood loss, maintain end-organ perfusion, reduce coagulopathy progression, or mitigate ischemia-reperfusion injury at the cellular level
+
+### 7.4 The Bystander Gap Defines the Delivery Context
+
+In UK studies, bystanders were present before EMS in 96% of prehospital trauma death cases but intervened in only 25–30% of cases. This gap — between presence and action — means any effective prehospital intervention must be:
+
+- Simple enough for bystander administration (auto-injector format, single-step)
+- Safe enough for broad lay-person use
+- Robust enough to provide benefit across the range of injury severities where it might be administered
+
+### 7.5 The Acuity-Stratified Target Population
+
+The Relative Mortality Analysis (PubMed 2018) quantifies the actionable target: patients with probability of survival 23–91%. This is the intermediate-acuity group for whom prehospital time is genuinely decisive. Interventions targeting this group — deferring death long enough to reach surgical hemorrhage control — have the highest expected value per patient treated.
+
+### 7.6 Transport vs. Treatment: The Rural/Austere Calculus
+
+Alarhayem et al. (2016) make explicit what the broader literature implies: when transport within 30 minutes is impossible, pharmacologic extension of the survival window is the only alternative. The median time from injury to definitive care in North America is already ~60 minutes (PMC 2023); in rural or low-resource settings it is substantially longer. Drugs or biologics that extend the survivable window by even 30–60 minutes could shift a meaningful fraction of currently non-survivable prehospital deaths into the survivable category.
 
 ---
 
 ## SROI Interpretation
 
-**Bottom line:** A meaningful and quantifiable fraction of trauma deaths (~14% of all fatalities, ~45% of hemorrhagic deaths) are potentially preventable with advanced prehospital intervention delivered within a ~2-hour window. Hemorrhage is the overwhelmingly dominant preventable mechanism (>80% of preventable deaths). The therapeutic window is real, narrows rapidly, and is consistent with pharmacological intervention via autoinjector or other field-deployable formats. This **strongly supports the addressable DALYs estimate** for a prehospital A2A agonist.
+**Bottom line:** A meaningful and quantifiable fraction of trauma deaths (~14% of all fatalities by the most conservative estimate, ~45% of hemorrhagic deaths by the most specific estimate) are potentially preventable with advanced prehospital intervention delivered within a ~2-hour window. Hemorrhage is the overwhelmingly dominant preventable mechanism (>80% of preventable deaths). The therapeutic window is real, narrows rapidly within 30–120 minutes of injury, and is consistent with pharmacological intervention via auto-injector or other field-deployable formats. This **strongly supports the addressable DALYs estimate** for a prehospital A2A agonist and argues that the target population is both large and specifically identified.
+
+**Evidence quality for this conclusion:** Moderate-High. Multiple independent data streams (military autopsy studies, civilian systematic reviews, hemorrhagic shock outcome curves, preclinical pharmacology) converge on the same 30-minute-to-2-hour window and the same hemorrhage-dominant mechanism. The main uncertainty is in translating the "potentially preventable" category — defined by anatomic criteria — into the fraction that a specific pharmacologic intervention would actually rescue.
 
 ---
 
 ## Sources
 
-- [Time is the Enemy — Alarhayem et al., ScienceDirect](https://www.sciencedirect.com/science/article/abs/pii/S0002961016305542)
-- [PATOS Study — PLOS Medicine 2020](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003360)
-- [EMS Intervals and the Golden Hour — Newgard et al., PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC3008652/)
-- [Relative Mortality Analysis of the Golden Hour — PubMed 2018](https://pubmed.ncbi.nlm.nih.gov/30118362/)
-- [Changing epidemiology: bimodal distribution — PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC2943446/)
-- [TraumaRegister DGU temporal distribution — PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6386341/)
-- [Trimodal in Resource-Limited Settings — PubMed](https://pubmed.ncbi.nlm.nih.gov/36939860/)
-- [Are Pre-hospital Trauma Deaths Preventable? — Pfeifer et al., Wiley](https://onlinelibrary.wiley.com/doi/10.1007/s00268-019-05056-1)
-- [Preventable death systematic review — ScienceDirect 2021](https://www.sciencedirect.com/science/article/pii/S0020138321006458)
-- [Historical comparison preventable prehospital deaths — ScienceDirect 2017](https://www.sciencedirect.com/science/article/pii/S0020138317300608)
-- [Prehospital deaths: survivable injuries, bystanders — PubMed 2017](https://pubmed.ncbi.nlm.nih.gov/28262281/)
-- [Early and prehospital trauma deaths: advanced resuscitative care — PubMed 2020](https://pubmed.ncbi.nlm.nih.gov/32176169/)
-- [Eastridge et al. 2012: Death on the Battlefield — PubMed](https://pubmed.ncbi.nlm.nih.gov/23192066/)
-- [Eastridge et al. 2019: Outcomes of traumatic hemorrhagic shock — Wiley](https://onlinelibrary.wiley.com/doi/full/10.1111/trf.15161)
-- [Impact of Hemorrhage on Trauma Outcome — J Trauma 2006](https://journals.lww.com/jtrauma/fulltext/2006/06001/impact_of_hemorrhage_on_trauma_outcome__an.2.aspx)
-- [Epidemiology of Trauma-Related Hemorrhage — PMC 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10694464/)
-- [Navigating Hemorrhagic Shock — Biomedicines Dec 2024](https://www.mdpi.com/2227-9059/12/12/2864)
-- [Traumatic hemorrhage and chain of survival — PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC10207757/)
-- [EMS Tactical Damage Control Resuscitation — StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK599525/)
-- [Every Minute Matters in Hemorrhagic Shock — 410 Medical](https://410medical.com/app/uploads/2023/03/Every-Minute-Matters-in-Hemorrhagic-Shock-White-Paper.pdf)
-- [AAOS Now: Hemorrhage control time-sensitive, 2025](https://www.aaos.org/aaosnow/2025/nov/clinical/clinical01/)
+### Section 1: Trimodal Distribution
+- Changing epidemiology — bimodal distribution: https://pmc.ncbi.nlm.nih.gov/articles/PMC2943446/
+- TraumaRegister DGU temporal distribution: https://pmc.ncbi.nlm.nih.gov/articles/PMC6386341/
+- Mortality progressive decreasing, not trimodal: https://www.sciencedirect.com/science/article/pii/S2221618915000311
+- Timing of death — contemporary assessment: https://www.sciencedirect.com/science/article/abs/pii/S0022480415008707
+- Trimodal in resource-limited settings: https://pubmed.ncbi.nlm.nih.gov/36939860/
+
+### Section 2: The Golden Hour
+- Time is the Enemy — Alarhayem et al.: https://www.sciencedirect.com/science/article/abs/pii/S0002961016305542
+- Time is the Enemy — STRAC PDF: https://www.strac.org/wp-content/uploads/2024/02/Time_is_the_Enemy.pdf
+- Relative Mortality Analysis of the Golden Hour, 2018: https://pubmed.ncbi.nlm.nih.gov/30118362/
+- Redefining the golden hour for severe head injury: https://www.sciencedirect.com/science/article/abs/pii/S0020138312000186
+- Every Minute Matters in Hemorrhagic Shock: https://410medical.com/app/uploads/2023/03/Every-Minute-Matters-in-Hemorrhagic-Shock-White-Paper.pdf
+- Hemorrhage control time-sensitive imperative — AAOS 2025: https://www.aaos.org/aaosnow/2025/nov/clinical/clinical01/
+- EMS Intervals and the Golden Hour — Newgard et al.: https://pmc.ncbi.nlm.nih.gov/articles/PMC3008652/
+- PATOS Study — PLOS Medicine 2020: https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003360
+- PATOS PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC7537901/
+- Does prehospital time affect survival without prehospital care: https://pmc.ncbi.nlm.nih.gov/articles/PMC5525481/
+- Prehospital time and pediatric trauma: https://link.springer.com/article/10.1007/s00383-024-05742-9
+
+### Section 3: Hemorrhagic Shock Therapeutic Window
+- Traumatic hemorrhage and chain of survival: https://pmc.ncbi.nlm.nih.gov/articles/PMC10207757/
+- Rat hemorrhage survival model — PLOS One: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0080862
+- Swine continuous hemorrhage model: https://pubmed.ncbi.nlm.nih.gov/2548273/
+- Impact of Hemorrhage on Trauma Outcome — J Trauma 2006: https://journals.lww.com/jtrauma/fulltext/2006/06001/impact_of_hemorrhage_on_trauma_outcome__an.2.aspx
+- J Trauma 2006 PubMed: https://pubmed.ncbi.nlm.nih.gov/16763478/
+- Navigating Hemorrhagic Shock — Biomedicines Dec 2024: https://www.mdpi.com/2227-9059/12/12/2864
+- Epidemiology of Trauma-Related Hemorrhage — N. America 2023: https://pmc.ncbi.nlm.nih.gov/articles/PMC10694464/
+
+### Section 4: Military Data
+- Eastridge et al. 2012 — Death on the Battlefield: https://pubmed.ncbi.nlm.nih.gov/23192066/
+- Died of wounds — Eastridge 2011: https://pubmed.ncbi.nlm.nih.gov/21795876/
+- Eastridge et al. 2019 — Outcomes of traumatic hemorrhagic shock (Wiley): https://onlinelibrary.wiley.com/doi/full/10.1111/trf.15161
+- Eastridge et al. 2019 PubMed: https://pubmed.ncbi.nlm.nih.gov/30980749/
+
+### Section 5: Preventable Prehospital Deaths — Civilian
+- Are Pre-hospital Trauma Deaths Preventable — Pfeifer et al. (Wiley): https://onlinelibrary.wiley.com/doi/10.1007/s00268-019-05056-1
+- Pfeifer et al. PubMed: https://pubmed.ncbi.nlm.nih.gov/31214829/
+- Preventable death in trauma — systematic review on definition, 2021: https://www.sciencedirect.com/science/article/pii/S0020138321006458
+- Early and prehospital trauma deaths — advanced resuscitative care (2020): https://pubmed.ncbi.nlm.nih.gov/32176169/
+- Historical comparison of preventable prehospital deaths — 2017 ScienceDirect: https://www.sciencedirect.com/science/article/pii/S0020138317300608
+- Historical comparison PubMed: https://pubmed.ncbi.nlm.nih.gov/28363752/
+- Prehospital deaths — survivable injuries and bystanders (2017) PubMed: https://pubmed.ncbi.nlm.nih.gov/28262281/
+- Prehospital deaths bystanders ScienceDirect: https://www.sciencedirect.com/science/article/pii/S0020138317300979
+- Bleeding to death in a big city: https://pubmed.ncbi.nlm.nih.gov/32590562/
+- The forgotten cohort — prehospital trauma death lessons: https://link.springer.com/article/10.1186/s13049-023-01107-8
+- Epidemiology of prehospital and hospital hemorrhage deaths (UT Health): https://scholars.uthscsa.edu/en/publications/epidemiology-of-prehospital-and-hospital-traumatic-deaths-from-li/
+
+### Section 6: Remote Damage Control Resuscitation
+- EMS Tactical Damage Control Resuscitation Protocol — StatPearls: https://www.ncbi.nlm.nih.gov/books/NBK599525/
+- Haemorrhage control prehospital — scoping review: https://pmc.ncbi.nlm.nih.gov/articles/PMC6661646/
