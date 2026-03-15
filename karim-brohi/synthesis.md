@@ -3,7 +3,7 @@
 *Compiled from scite.ai and academic database searches across 8 priority areas.*
 
 **Search Date:** March 15, 2026
-**Status:** Priority 1 (A2A receptor in trauma) pending; all other priorities complete.
+**Status:** All 8 priorities complete.
 
 ---
 
@@ -11,7 +11,7 @@
 
 | Priority | Topic | Net SROI Direction | Confidence |
 |----------|-------|-------------------|------------|
-| 1 | A2A agonists in trauma/IRI (preclinical) | ↑↑ P(drug) | High (pending full results) |
+| 1 | A2A agonists in trauma/IRI (preclinical) | ↑↑ P(drug) | High ✅ |
 | 2 | IRI drug clinical trial failure rates | ↓↓ P(drug) base rate | Very High |
 | 3 | Organ-on-chip predictive validity | ↑↑ P(platform) | High |
 | 4 | Trauma mortality timing / therapeutic window | ↑ Addressable DALYs | Very High |
@@ -38,16 +38,25 @@
 - ALM (adenosine-lidocaine-magnesium combination) showed inferior survival vs. standard resuscitation in porcine model (Priority 7)
 
 **Raises P(drug):**
-- A2AR agonist CGS21680 protective in MI (~21% absolute infarct reduction in rabbit), hemorrhagic shock (reduced MOF, IL-6/TNF-α), cerebral ischemia (BDNF/MAPK), and spinal cord injury (Priority 5)
-- A2AAR-KO mice lose all cardioprotection — definitive mechanistic proof (Priority 5)
-- A2AR-KO mice show significantly worsened lung injury and MOF after hemorrhagic shock (PMC10292675, 2022/2023) (Priority 5)
+- **Regadenoson: 100% vs. 40% survival at 24h in porcine ECPR model** (Wisniewski 2024, J Surg Res) (Priority 1)
+- **ReWiRe Phase 2a trial registered and ethically approved** — regadenoson in human trauma/hemorrhagic shock, Queen Mary University London (Karim Brohi's institution) (Priority 1)
+- CGS21680 improves survival in hemorrhagic shock rat model (Zhu 2013) (Priority 1)
+- A2aR-KO mice show significantly worsened MOF after hemorrhagic shock — definitive causal proof (Kelestemur 2022) (Priority 1)
+- ATL146e: 40% → 100% survival in mouse sepsis; ATL-146e: 65% → 13% lethality in liver injury (Priority 1)
+- CGS21680 in DCD liver transplant porcine model: 100% vs. 40% 72h survival (p=0.04) (Priority 1)
+- A2AR agonist CGS21680 protective in MI (~21% absolute infarct reduction in rabbit), cerebral ischemia (BDNF/MAPK), and spinal cord injury (Priority 5)
 - A2A agonists operate primarily on leukocytes/lymphocytes — distinct from failed cardiomyocyte-intrinsic targets (Priority 5)
 - Post-ischemic (reperfusion-phase) A2A activation is cardioprotective — clinically actionable timing (Priority 5)
 - Kidney-on-chip: adenosine protects proximal tubule cells against renal IRI (Vormann et al. 2022) (Priority 3)
 - **No selective A2A agonist has failed a Phase II/III IRI trial** — the failure prior applies to drugs that have been tried, not this class (Priority 2)
 - Trauma/hemorrhagic shock context: shorter ischemic durations, younger patients, fewer comedications than STEMI — potentially more favorable translation (Priority 2)
 
-**Net assessment on P(drug):** The base rate is poor, but the A2A mechanism has specific features that partially mitigate the translational failure pattern. The leukocyte-mediated anti-inflammatory mechanism, reperfusion-phase timing, and trauma-context advantages distinguish it from most failed IRI drugs. Estimated P(drug) should be above base rate but substantially discounted — approximately 15–25% rather than near-zero.
+**Critical caveat — brain IRI:**
+- **A2AR ANTAGONISM (not agonism) is neuroprotective in cerebral IRI** (Mohamed 2016) (Priority 1)
+- In the brain, adenosine activates A2AR to INDUCE neuronal damage — opposite of peripheral organs
+- Patient selection must exclude severe isolated TBI; this is the primary contrasting finding for the A2A agonist program
+
+**Net assessment on P(drug):** The base rate is poor (Priority 2), but Priority 1 evidence substantially updates this upward. Regadenoson is the only FDA-approved A2AR agonist; it has now demonstrated survival benefit in a large-animal shock model, and a Phase 2a human trial is registered at the lead investigator's institution. The leukocyte-mediated anti-inflammatory mechanism, reperfusion-phase timing, and trauma-context advantages distinguish it from all drugs that have failed. The brain-specific reversal of benefit is the single most important contrasting finding and must be addressed by patient selection criteria. Estimated P(drug) for trauma/hemorrhagic shock indication: **25–35%** — materially above the near-zero IRI base rate.
 
 ---
 
@@ -118,7 +127,7 @@
 
 | Evidence Type | Finding | SROI Impact |
 |--------------|---------|------------|
-| A2A agonists show efficacy in trauma models (Priority 5) | **Confirmed** — multiple species, multiple organs, KO validation | P(drug) ↑ |
+| A2A agonists show efficacy in trauma models (Priority 1 & 5) | **Confirmed** — regadenoson 100% vs. 40% survival (ECPR); CGS21680 improves survival in HS; A2aR-KO worsens MOF; Phase 2a trial registered | P(drug) ↑↑ |
 | IRI drugs consistently fail in Phase 2/3 (Priority 2) | **Confirmed** — every IRI drug that reached Phase III has failed | P(drug) ↓ |
 | OoC has predicted human outcomes (Priority 3) | **Confirmed** — DILI prediction; PK prediction; one IND approved on OoC data | P(platform) ↑ |
 | No OoC-to-clinic translation precedent for IRI | **Confirmed gap** — mechanistic work exists but no clinical validation | P(platform) ↓ (partial) |
@@ -131,9 +140,9 @@
 
 ## Recommended Next Research Steps
 
-1. **Priority 1 results** (A2A receptor in trauma/IRI preclinical literature): Review all scite.ai supporting vs. contrasting citation tallies once received.
+1. **ReWiRe trial results**: Identify the outcome of the Phase 2a dose-finding trial (Queen Mary University London, REC 19/LO/0329). If published, this is the single highest-value piece of evidence for updating P(drug).
 
-2. **Regadenoson human safety data review**: Regadenoson is FDA-approved and commercially available for pharmacologic stress testing. Review its human PK/PD and adverse event profile in acute settings.
+2. **Regadenoson human safety data in hemorrhagic shock**: Review PK/PD and adverse event profile specifically in hypotensive/hemorrhaging patients — vasodilatory effects of regadenoson could be a concern in already-hypotensive trauma patients.
 
 3. **Comorbidity-specific OoC experiment design**: Design the kidney and cardiac OoC experiments specifically with diabetic/hypertensive cell conditions to address the comorbidity gap.
 
