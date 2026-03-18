@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "scite": {
+      "type": "sse",
+      "url": "https://api.scite.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SCITE_API_KEY}"
+      }
+    }
+  }
+}
