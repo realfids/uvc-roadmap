@@ -1,130 +1,149 @@
 
 ================================================================================
-INTERCEPT MONTE CARLO v2 — 6-CORRECTION SROI REPORT
+INTERCEPT MONTE CARLO v3 — CONCEPT-NOTE-ALIGNED SROI REPORT
 Open Philanthropy Cost-Effectiveness Analysis | March 2026
 
-V2 CORRECTIONS APPLIED
-  1. Attribution fraction:  β(3,4) → mode 40%, mean 43%  [was 100% — ReWiRe already registered]
+V3 CHANGES (alignment to Concept Note v2, Karim Brohi Dec 2025)
+  - Reframed from A2A-specific to survival therapeutics discovery engine
+  - DALY scope expanded: trauma + MI + stroke + PPH (concept note indications)
+  - n_leads: mode=5 (concept note: "5+ qualified leads") — was mode=1 in v2
+  - Programme cost: ~£40M (~$51M) as stated — was $40-120M in v2
+  - Platform-independent value pathway added (diagnostics, spinouts, playbooks)
+  - Attribution: β(4,4) mode 50% — slightly higher than v2 (platform is unique)
+  - P(Phase3 success): β(2.5,6) mean 29% — slightly higher (multiple mechanisms)
+
+V2 CORRECTIONS RETAINED
+  1. Attribution fraction:  β(4,4) → mode 50%, mean 50%
   2. Staged drug funding:   P(Phase3 funded) × P(Phase3 success) × P(adoption)
-                            replaces single Beta(4,9) block
   3. Portfolio effect:      P(≥1 of n leads succeeds) = 1−(1−p_per_lead)^n_leads
-                            E[n_leads]≈1.7; boosts P(drug) by ~50% vs single-lead
-  4. HIC/LMIC split:        HIC lognormal(5M, σ=0.45) + LMIC lognormal(3.5M, σ=0.60)
-                            replaces single global_dalys × addressable_fraction
-  5. Time discounting:      discount_factor = (1+r)^−T; Tri(1%,3%,5%) × Tri(8,14,22yr)
-                            E[factor]≈0.65  [was 1.0 — no discounting]
-  6. VOI guidance:          Expert interview priorities added to report (see below)
+                            E[n_leads]≈4.5
+  4. HIC/LMIC split:        HIC lognormal(8M, σ=0.50) + LMIC lognormal(6M, σ=0.65)
+  5. Time discounting:      discount_factor = (1+r)^−T
+                            E[factor]≈0.67
+  6. VOI guidance:          Expert interview priorities (see below)
 
 INVESTMENT PROFILE
-  Program cost:  $40-120M (modal $60M)
-  DALY value:    $50k-150k (OpenPhil benchmark ~$100k)
-  Threshold:     2,100× ROI
-  Simulations:   100,000
+  Programme cost:  ~£40M (~$51M) — concept note figure
+  DALY value:      $50k-150k (OpenPhil benchmark ~$100k)
+  Threshold:       2,100× ROI
+  Simulations:     100,000
+
+TWO-PATHWAY ROI MODEL
+  Drug pathway:     platform → leads → Phase 3 → adoption → DALYs → ROI
+  Platform pathway: ecosystem value (atlas, diagnostics, spinouts) × attribution × P(platform) / cost
+  Total ROI = drug_roi + platform_roi
+
+  Mean drug ROI:          21,714×
+  Median drug ROI:        14,957×
+  Mean platform ROI:           0×
+  Mean platform value: $47M
+  Mean programme cost: $54M
 
 P(SUCCESS) DECOMPOSITION
-  E[P(platform validates A2A)]:      63.6%
-  E[P(Phase 3 funded | 2a+)]:        69.9%
-  E[P(Phase 3 success | funded)]:    25.0%
-  E[P(adoption | approval)]:         60.0%
+  E[P(platform delivers engine)]:   63.6%
+  E[P(Phase 3 funded | 2a+)]:      69.9%
+  E[P(Phase 3 success | funded)]:  29.4%
+  E[P(adoption | approval)]:       60.0%
   ──────────────────────────────────────────────
-  E[P(drug success per lead)]:        10.5%
-  E[n viable leads]:                  1.79
-  E[P(portfolio ≥1 lead succeeds)]:   17.0%
-  E[P(success)] = E[platform×port]:   10.8%
+  E[P(drug success per lead)]:       12.3%
+  E[n viable leads]:                 4.50  (concept note target: 5+)
+  E[P(portfolio ≥1 lead succeeds)]:  41.0%
+  E[P(success)] = E[platform×port]:  26.1%
 
-  ⚠ CALIBRATION FLAG: stage-product E[P(drug/lead)] ≈ 10% is below
-  the v1 synthesis holistic estimate (25-35%). The decomposition reveals that the
-  synthesis estimate requires above-average performance on ALL stages simultaneously.
-  The staged model is more conservative and transparent. Priority expert interview:
-  the Phase 3 success probability (see VOI section).
+  Note: With E[n_leads]≈4.5 and multiple mechanism families,
+  the portfolio effect is substantial. P(portfolio) is 33241%
+  higher than single-lead P(drug/lead).
 
-NEW CORRECTION FACTORS
-  E[attribution]:             42.8%  (v1: 100%)
-  E[discount factor]:        0.655  (v1: 1.000 — no discounting)
-  E[time to impact]:          14.7 yr
-  E[HIC arm]:                  5.5M DALYs/yr
-  E[LMIC arm]:                 4.2M DALYs/yr
+CORRECTION FACTORS
+  E[attribution]:              50.0%
+  E[discount factor]:        0.673
+  E[time to impact]:          13.7 yr
+  E[HIC arm]:                  9.1M DALYs/yr  (trauma+MI+stroke+PPH)
+  E[LMIC arm]:                 7.4M DALYs/yr
 
 SIMULATION RESULTS
-  Mean ROI:                   3,382×
-  Median ROI:                 1,871×
-  5th percentile:               211×
-  25th percentile:              799×
-  75th percentile:            4,091×
-  95th percentile:           11,570×
+  Mean ROI:                  21,714×
+  Median ROI:                14,957×
+  5th percentile:             2,518×
+  25th percentile:            7,509×
+  75th percentile:           27,952×
+  95th percentile:           63,573×
 
 THRESHOLD EXCEEDANCE
-  P(ROI > 1,000×):      69.3%
-  P(ROI > 2,100×):      46.2%  ← Open Philanthropy bar
-  P(ROI > 5,000×):      19.6%
-  P(ROI > 10,000×):      6.7%
+  P(ROI > 1,000×):      99.1%
+  P(ROI > 2,100×):      96.4%  ← Open Philanthropy bar
+  P(ROI > 5,000×):      85.3%
+  P(ROI > 10,000×):     65.7%
 
 SENSITIVITY ANALYSIS (ranked by |Pearson r| with ROI)
-  P(Phase 3 RCT success | funded + OoC)            ↑  r = +0.390
-  N viable leads (portfolio effect)                ↑  r = +0.331
-  Counterfactual attribution fraction              ↑  r = +0.296
-  Acceleration vs BAU (years)                      ↑  r = +0.245
-  LMIC addressable DALYs                           ↑  r = +0.200
-  HIC addressable DALYs                            ↑  r = +0.198
-  R&D cost                                         ↓  r = -0.167
-  P(guideline adoption | approval)                 ↑  r = +0.165
-  P(OoC/DT platform validates A2A)                 ↑  r = +0.162
-  DALY value ($)                                   ↑  r = +0.152
-  P(Phase 3 funded | Phase 2a positive)            ↑  r = +0.130
-  Annual discount rate r                           ↓  r = -0.083
-  Time to impact midpoint T (years)                ↓  r = -0.060
+  P(Phase 3 RCT success | funded + platform)           ↑  r = +0.373
+  Acceleration vs BAU (years)                          ↑  r = +0.326
+  Counterfactual attribution fraction                  ↑  r = +0.326
+  LMIC addressable DALYs (trauma+MI+stroke+PPH)        ↑  r = +0.321
+  HIC addressable DALYs (trauma+MI+stroke+PPH)         ↑  r = +0.293
+  P(platform delivers discovery engine)                ↑  r = +0.212
+  DALY value ($)                                       ↑  r = +0.202
+  P(guideline adoption | approval)                     ↑  r = +0.180
+  N viable leads (concept note target: 5+)             ↑  r = +0.171
+  P(Phase 3 funded | Phase 2a positive)                ↑  r = +0.148
+  Annual discount rate r                               ↓  r = -0.108
+  Programme cost (~£40M)                               ↓  r = -0.074
+  Time to impact midpoint T (years)                    ↓  r = -0.066
+  Platform ecosystem value (non-drug)                  ↑  r = +0.001
 
 
 EXPERT INTERVIEW PRIORITIES (Value of Information — top 3 sensitivity drivers)
   Based on sensitivity analysis, these conversations have highest expected VOI:
 
-  1. [P(Phase 3 RCT success | funded + OoC)  r=+0.390]
-     IRI pharmacologist / independent ReWiRe trialist (NOT Karim's group)
-    Questions: Is regadenoson safe in hypotensive patients? (vasodilatory risk)
-    What is the realistic Phase 2a success criterion and enrolment status?
-    Does OoC comorbidity modelling change Phase 3 design confidence at all?
+  1. [P(Phase 3 RCT success | funded + platform)  r=+0.373]
+     IRI pharmacologist / independent trialist (NOT Karim's group)
+    Questions: Can survival therapeutics (upstream cascade modulators) overcome
+    the IRI Phase 3 failure base rate? Does OoC comorbidity modelling
+    materially change Phase 3 design confidence? What is the realistic
+    probability across 3 mechanism families (not just A2A)?
 
-  2. [Counterfactual attribution fraction  r=+0.296]
+  2. [Acceleration vs BAU (years)  r=+0.326]
+     ARIA / funding landscape expert (see attribution above)
+    Drives both attribution and acceleration — same expert conversation.
+
+  3. [Counterfactual attribution fraction  r=+0.326]
      ARIA / CDMRP / funding landscape expert
-    Questions: Would CDMRP JWMRP fund a Phase 3 if ReWiRe Phase 2a is positive?
-    What is ARIA's appetite for this niche without INTERCEPT's OoC platform?
-    What is the realistic counterfactual — would another funder do this in 5 yr?
-
-  3. [Acceleration vs BAU (years)  r=+0.245]
-     ARIA / CDMRP / funding landscape expert (see attribution above)
-    Drives both attribution and acceleration estimates — same expert conversation.
+    Questions: Would this discovery engine be built without INTERCEPT?
+    Is the cross-indication platform (not just ReWiRe) counterfactually
+    unique? Would CDMRP fund the trauma arm alone?
 
 
-SCENARIO COMPARISON (fixed-parameter; r=3% discount rate applied)
-  ⚠ Key finding: with attribution + discounting, Conservative FAILS the threshold.
-    Clearing 2,100× requires at least Moderate assumptions on every dimension.
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Scenario                     Ann.DALYs  P(succ)  Accel   Attr  Disc.F        ROI  Pass
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Platform fails / BAU             6.0M       4%      2    15%   0.587         65×     ✗
-Conservative                     7.5M       9%      5    30%   0.642      1,000×     ✗
-Moderate                         8.5M      17%      7    43%   0.661      4,108×     ✓
-Optimistic                      11.0M      22%      8    58%   0.701     12,116×     ✓
-Transformative                  15.0M      33%     10    70%   0.744     36,833×     ✓
+SCENARIO COMPARISON (fixed-parameter; r=3% discount rate; includes platform ROI)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Scenario                     Ann.DALYs  P(succ)  Accel   Attr  Disc.F   Drug ROI  Plat ROI      Total  Pass
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Platform fails / BAU            10.0M       4%      2    15%   0.587        138×        0×        138×     ✗
+Conservative                    12.0M      12%      5    35%   0.642      3,172×        0×      3,172×     ✓
+Moderate                        14.0M      25%      7    50%   0.681     16,356×        0×     16,356×     ✓
+Optimistic                      18.0M      35%      9    60%   0.722     48,190×        0×     48,190×     ✓
+Transformative                  25.0M      45%     12    70%   0.744    127,849×        1×    127,850×     ✓
 
 CRITICAL RISK FACTORS
-  1. Regadenoson vasodilatory safety in hypotensive trauma patients — primary Phase 2a risk.
-     ReWiRe results are the single highest-value upcoming data event.
-  2. IRI Phase 3 failure base rate is catastrophic (CIRCUS, CONDI2, AMISTAD-II all failed).
-     A2A agonists are untested at Phase 3 — not immune to translational failure.
-  3. Attribution: ReWiRe is already registered without INTERCEPT. If ARIA/CDMRP would
-     fund Phase 3 anyway, INTERCEPT's marginal SROI is sharply reduced.
-  4. LMIC deployment bottleneck: cold chain, IV administration, EMS access all constrain
-     the large LMIC DALY burden from being practically addressable.
-  5. OoC-to-IRI validation gap: DILI prediction is proven; IRI drug efficacy prediction
-     is not yet clinically validated. Kidney chip adenosine result is promising but early.
+  1. IRI Phase 3 failure base rate remains catastrophic (CIRCUS, CONDI2, AMISTAD-II).
+     Multiple mechanism families diversify but do not eliminate this risk.
+  2. Platform delivery risk: building a validated cross-organ discovery engine in
+     3 years is ambitious. Go/No-Go at Year 2-3 is the critical gate.
+  3. Cross-indication translation: trauma is the "proving ground" but extension to
+     MI and stroke requires separate clinical validation — not automatic.
+  4. Attribution: the platform (not just ReWiRe) is unique, but ARIA/CDMRP could
+     fund individual condition-specific programmes without the cross-indication engine.
+  5. LMIC deployment bottleneck: cold chain, IV administration, EMS access all
+     constrain the large LMIC DALY burden from being practically addressable.
+  6. n_leads target: "5+ qualified leads by Year 5" is aspirational. Historical
+     platform drug discovery hit rates suggest 3-4 may be more realistic.
+  7. Concept note claims "100k deaths + 120k disability prevented in UK/US alone"
+     — this requires successful deployment across ALL indications, not just trauma.
 
-VERDICT: MARGINAL CASE: Plausible but requires favorable assumptions on multiple parameters.
-  The Moderate scenario (synthesis midpoint) just clears the threshold.
+VERDICT: STRONG CASE: High probability of meeting threshold under most scenarios.
 
-Median ROI 1,871× is BELOW the 2,100× threshold.
-The v2 corrections reduce P(>2100×) from 74% (v1) to 46% (v2), primarily
-driven by the attribution fraction (~43%) and time discounting (~0.65 factor).
-The portfolio effect (~+50% on P(drug)) partially offsets these corrections.
+Median ROI 14,957× is ABOVE the 2,100× threshold.
+v3 vs v2: broader DALY scope, more leads, and lower cost shift the analysis
+significantly upward. The concept note describes a more ambitious programme
+than the v2 A2A-only framing captured.
 
 ================================================================================

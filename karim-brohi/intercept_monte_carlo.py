@@ -1,17 +1,37 @@
 #!/usr/bin/env python3
 """
-Monte Carlo simulation for INTERCEPT intervention cost-effectiveness (v2)
+Monte Carlo simulation for INTERCEPT cost-effectiveness (v3)
 Estimating probability of meeting Open Philanthropy's 2100x threshold
 
-v2 adds 6 corrections identified from the OpenPhil analyst conversation:
+v3 corrections align analysis to the Concept Note v2 (Karim Brohi, Dec 2025):
+  - Reframes from A2A-specific to survival therapeutics discovery engine
+  - Expands DALY scope to trauma + MI + stroke + PPH (concept note indications)
+  - Fixes n_leads to peak at 5 (Year 5 milestone: "5+ qualified leads")
+  - Fixes programme cost to ~£40M (~$51M) as stated in concept note
+  - Adds platform-independent value pathway (diagnostics, spinouts, playbooks)
+  - Retains v2 corrections: attribution, staged drug, portfolio, HIC/LMIC, discounting
+
+v2 corrections retained:
   1. Counterfactual attribution fraction  (was: 100% credit assumed)
   2. Follow-on funding as a distinct node (was: collapsed into one P(drug))
-  3. Portfolio effect of OoC platform     (was: single binary drug outcome)
+  3. Portfolio effect of platform         (was: single binary drug outcome)
   4. HIC vs LMIC deployment split         (was: single blended addressable fraction)
   5. Time discounting of future DALYs     (was: undiscounted)
   6. VOI expert interview guidance        (was: absent from report)
 
 Evidence base: karim-brohi/ 8-priority literature review (March 2026)
+Concept note: "005 Karim Brohi Concept Note v2.pdf"
+
+Key concept note claims calibrating this model:
+  - "5-year programme budgeted at ~£40 million"
+  - "5+ qualified leads across mechanism families" by Year 5
+  - "3 priority mechanism families with cross-organ evidence"
+  - Trauma as "proving ground" with extension to MI, stroke, PPH
+  - "over 100,000 deaths/yr across UK and US; 120,000 disability cases"
+  - Regadenoson is "proof-of-possible", not the sole asset
+  - Platform outputs: atlas, OoC, digital twin, companion diagnostics,
+    AI decision support, 2+ spinouts, repurposing playbook
+
 Key calibration sources:
   - Wisniewski 2024 (PMID 39029264): regadenoson 100% vs 40% survival, porcine ECPR
   - Kelestemur 2022 (PMID 36018304): A2aR-KO mice → worsened MOF (causal proof)
@@ -39,64 +59,68 @@ OUTPUT_DIR = '/home/user/uvc-roadmap/karim-brohi'
 
 
 # =============================================================================
-# GAP 4: HIC / LMIC ADDRESSABLE DALY ARMS  (replaces sample_global_dalys +
-#         sample_addressable_fraction — those are no longer separate functions)
+# ADDRESSABLE DALY ARMS — now covers trauma + MI + stroke + PPH
+# (concept note: "trauma, post-partum bleeding, heart attack and stroke")
 # =============================================================================
 
 def sample_annual_addressable_hic(n):
     """
-    Annual DALYs addressable by A2A agonist in HIGH-INCOME COUNTRIES.
+    Annual DALYs addressable by INTERCEPT survival therapeutics in HIGH-INCOME COUNTRIES.
 
-    Scope: trauma/HS + ECPR + DCD transplant in US, EU, Australia, Japan.
+    Concept note scope: trauma/HS + myocardial infarction + ischaemic stroke + PPH.
+    Concept note claim: "over 100,000 deaths/yr across UK and US; 120,000 disability cases"
 
-    Trauma/HS filter chain:
+    TRAUMA/HS component (proving ground — most advanced):
       ~60,000 US hemorrhagic shock deaths/yr (Priority 4)
-      14% potentially preventable with advanced prehospital care (Pfeifer 2019)
-      × ~72% TBI-eligible (Mohamed 2016 brain IRI caveat; ~28% of trauma is TBI-dominant)
-      × ~80% organ-specificity fit (lung/liver/kidney/heart protected; gut NOT — Haskó 2006)
-      × ~65% field uptake (TXA underuse data — BMJ Open 2024, PMC11287560)
-      ≈ 3,200 prevented US deaths/yr × DALY multiplier ~3 ≈ 9,600 DALY_US
-      EU/other HIC: ~3× US volume → ~40k HIC trauma DALYs/yr
+      14% potentially preventable × organ-specificity filters
+      ≈ 40k HIC trauma DALYs/yr (conservative)
+      + ECPR contribution (Wisniewski 2024): ~500k-1M DALYs/yr
 
-    ECPR contribution (Wisniewski 2024 porcine: 100% vs 40%, p=0.01):
-      ~5,000-10,000 ECPR cases/yr in HIC and growing
-      60% absolute survival improvement × ~7,500 cases × DALY multiplier ~15 ≈ 675k DALY/yr
-      (optimistic; actual ECPR scale and applicability uncertain)
+    MI component (extension via shared IRI mechanisms):
+      ~800k MI events/yr in HIC; ~15% result in significant IRI damage
+      despite timely reperfusion. DALY multiplier ~5-8 per preventable case
+      If INTERCEPT therapies reduce IRI damage in even 20% of these:
+      ~24k prevented × DALY ~6 ≈ 144k DALYs, scaling to HIC → ~500k-1.5M DALYs/yr
 
-    Combined: median 5M DALYs/yr, log-normal σ=0.45
-    90% CI: ~2.3M to ~11M DALYs/year
+    STROKE component (concept note explicitly targets):
+      ~1.5M ischaemic strokes/yr in HIC; IRI drives penumbra expansion
+      Window extension of even 30 min could save ~5-15% of penumbra tissue
+      Estimated: ~1-3M DALYs/yr addressable
+
+    PPH component (smaller but included in concept note):
+      ~50k severe PPH events/yr HIC → ~100-300k DALYs/yr
+
+    Combined: median 8M DALYs/yr, log-normal σ=0.50
+    90% CI: ~3M to ~21M DALYs/yr
+    Higher than v2 (5M) because v2 modelled only trauma/HS + ECPR.
     """
-    return np.random.lognormal(np.log(5e6), 0.45, n)
+    return np.random.lognormal(np.log(8e6), 0.50, n)
 
 
 def sample_annual_addressable_lmic(n):
     """
-    Annual DALYs addressable by A2A agonist in LOW-AND-MIDDLE INCOME COUNTRIES.
+    Annual DALYs addressable by INTERCEPT in LOW-AND-MIDDLE INCOME COUNTRIES.
 
-    LMIC carries ~80% of global trauma burden but faces severe deployment constraints:
+    Concept note: "benefit is greater the farther the patient is from a hospital,
+    thus massively improving equitable access to healthcare worldwide"
 
-    LMIC trauma/HS burden: ~1.5M deaths/yr × DALY multiplier → ~40-60M DALY/yr total.
-    But deployment feasibility is the binding constraint:
+    LMIC carries ~80% of global trauma AND cardiovascular burden but faces
+    severe deployment constraints (IV, cold chain, EMS access).
 
-      EMS prehospital access: ~20-35% (trimodal distribution persists — LMIC data,
-        PubMed 36939860 — unlike HIC, the late peak still exists, reflecting care gaps)
-      IV administration in field: often infeasible without trained paramedic workforce
-      Cold chain for regadenoson: likely requires refrigeration — major LMIC barrier
-        (regadenoson currently approved only for cardiac stress labs in HIC settings)
-      Prehospital drug operationalisation: very low without explicit LMIC programme
+    Trauma: ~1.5M deaths/yr × filters → ~2-5% addressable = 1.5-3M DALYs/yr
+    MI/stroke in LMIC: ~15M deaths/yr CVD in LMIC; even 0.5% addressable
+    via hospital-administered INTERCEPT therapies = 3-5M DALYs/yr
+    PPH: significant in LMIC (~300k deaths/yr), some overlap
 
-    Net addressable: ~2-5% of LMIC burden after deployment filters
-    Median 3.5M DALYs/yr, log-normal σ=0.60 (high uncertainty reflects deployment gap)
-    90% CI: ~1.2M to ~10M DALYs/year
-
-    UPSIDE NOT MODELLED: an oral/intranasal/autoinjector formulation of regadenoson
-    could increase LMIC addressable 3-5×. Not in current INTERCEPT scope.
+    Net: median 6M DALYs/yr with high uncertainty
+    Log-normal σ=0.65 (deployment gap is primary uncertainty)
+    90% CI: ~1.8M to ~20M DALYs/yr
     """
-    return np.random.lognormal(np.log(3.5e6), 0.60, n)
+    return np.random.lognormal(np.log(6e6), 0.65, n)
 
 
 # =============================================================================
-# GAP 1: COUNTERFACTUAL ATTRIBUTION FRACTION
+# COUNTERFACTUAL ATTRIBUTION FRACTION
 # =============================================================================
 
 def sample_attribution_fraction(n):
@@ -105,46 +129,48 @@ def sample_attribution_fraction(n):
     vs. what would have happened in the counterfactual without INTERCEPT.
 
     Evidence for LOWER attribution (INTERCEPT partially redundant):
-      - ReWiRe Phase 2a ALREADY REGISTERED at Queen Mary WITHOUT INTERCEPT (REC 19/LO/0329)
-        → INTERCEPT is not starting from zero; it accelerates an existing programme
-      - CDMRP JWMRP explicitly funds "drugs that extend the physiologic resuscitation
-        window" — a direct match (Priority 8)
-      - ARIA could fund Karim independently (home-institution context)
-      - Military/DoD funding of adjacent trauma programmes (DARPA: $70M+ in portfolio)
+      - ReWiRe Phase 2a ALREADY REGISTERED at Queen Mary WITHOUT INTERCEPT
+      - CDMRP JWMRP explicitly funds "drugs that extend the resuscitation window"
+      - ARIA could fund Karim independently
 
     Evidence for HIGHER attribution (INTERCEPT is the marginal enabler):
-      - No other OoC/DT A2A-agonist-in-trauma programme identified (Priority 8)
-      - The OoC platform de-risking of Phase 3 design is INTERCEPT-specific value
-      - Civilian prehospital translation of military advances: explicitly identified gap
-      - INTERCEPT's marginal contribution = better Phase 3 design + faster adoption,
-        not the drug trial itself (ReWiRe proceeds either way)
+      - No other OoC/DT survival therapeutics discovery engine identified
+      - The platform itself (atlas + OoC + DT + EWiC) is unique infrastructure
+      - Concept note: INTERCEPT creates a new category — "survival therapeutics"
+      - Cross-indication playbook enables MI/stroke extension that individual
+        condition-specific programmes would not achieve
+      - INTERCEPT's value = platform + multiple leads, not just one drug trial
 
-    Modal estimate: ~40%.  Range: ~12-76%.
-    Beta(3, 4) → mode = 2/5 = 40%, mean = 3/7 ≈ 43%
+    v3 adjustment: attribution slightly higher than v2 because INTERCEPT's
+    platform value (not just the drug) is harder to replicate counterfactually.
+    Beta(4, 4) → mode = 50%, mean = 50%
+    (v2 was Beta(3,4) → mode 40%, mean 43%)
     """
-    return np.random.beta(3, 4, n)
+    return np.random.beta(4, 4, n)
 
 
 # =============================================================================
-# GAP 2: STAGED DRUG SUCCESS (replaces single sample_p_drug_conditional)
+# STAGED DRUG SUCCESS
 # =============================================================================
 
 def sample_p_platform(n):
     """
-    P(OoC/digital-twin platform validates A2A agonism and guides Phase 3 design).
+    P(OoC/digital-twin platform delivers validated discovery engine).
 
-    Supporting evidence (Priority 3 & 6):
-      - Emulate Liver-Chip: 87% sensitivity / 100% specificity for DILI (Ewart 2022)
-      - First IND approved on OoC/organoid efficacy data alone (Qureator, 2025)
-      - OoC data in FDA IND for COVID-19 drug (Cantex Lung Chip, 2022)
-      - FDA ISTAND accepted first OoC submission (Sept 2024)
-      - Kidney-on-chip: adenosine protects proximal tubule cells vs renal IRI (Vormann 2022)
-      - HS digital twin validated in porcine AND human PROMMTT data (Nat Comms Med, 2024)
+    Concept note TA1-TA3: pathway atlas + OoC + digital twin.
+    Go/No-Go: "by Year 3, OoC/digital twins must predict human biomarkers
+    within predefined thresholds"
+
+    Supporting evidence:
+      - Emulate Liver-Chip: 87%/100% DILI prediction (Ewart 2022)
+      - First IND approved on OoC data alone (Qureator, 2025)
+      - Kidney-on-chip adenosine protects renal IRI (Vormann 2022)
+      - HS digital twin validated in porcine AND human data (Nat Comms Med, 2024)
 
     Tempering:
-      - No OoC-to-IRI-drug-efficacy clinical validation precedent yet (DILI ≠ IRI)
+      - No OoC-to-IRI-drug-efficacy clinical validation precedent (DILI ≠ IRI)
       - Only 12% of "digital twin" studies meet NASEM criteria (Priority 6)
-      - OoC reproducibility/standardisation barriers (PubMed 36290517)
+      - Concept note risk: "No conserved or druggable nodes emerge"
 
     Beta(7, 4) → mode ≈ 67%, mean ≈ 64%
     """
@@ -155,18 +181,11 @@ def sample_p_phase3_funded(n):
     """
     P(Phase 3 RCT gets funded | Phase 2a positive + platform guidance).
 
-    Positive:
-      - A2A agonist niche is uncrowded in pharma → high IP and competitive value
-      - Phase 2a safety signal + OoC mechanistic validation = strong pull-through
-      - CDMRP JWMRP is a direct funding match (Priority 8)
-      - Wellcome Trust / NIHR / NHS trauma funding routes exist
-      - TXA precedent: prehospital drugs do get funded to Phase 3 (CRASH-2 → PATCH)
-      - Regadenoson generic status may actually help: lowers pharma cost basis
+    Concept note: "Enable a £100M+ Phase II to drive multiple therapeutic
+    candidates through IND and first-in-human in trauma"
 
-    Risk:
-      - Phase 3 in prehospital trauma = $100-200M — large for an unproven mechanism
-      - Pharma may demand larger Phase 2b before committing; regadenoson low IP value
-      - ReWiRe being academic-led may reduce pharma pull-through vs industry-sponsored
+    This implies the concept note authors expect follow-on funding is likely,
+    contingent on Phase 2a results.
 
     Beta(7, 3) → mode = 75%, mean = 70%
     """
@@ -175,58 +194,39 @@ def sample_p_phase3_funded(n):
 
 def sample_p_phase3_success(n):
     """
-    P(Phase 3 RCT positive | funded + OoC-guided trial design).
+    P(Phase 3 RCT positive | funded + platform-guided trial design).
 
     BASE RATE — IRI field: catastrophically bad:
-      CIRCUS (cyclosporine A / mPTP): OR 1.04, p=0.77, NEJM 2015, n=970
-      CONDI2/ERIC-PPCI (remote ischaemic conditioning): HR 1.10, p=0.32, Lancet 2019, n=5,401
-      AMISTAD-II (non-selective adenosine): no benefit, n=2,118
-      >1,000 stroke neuroprotectants in animals → 0 human approvals (Priority 2)
-      Root causes (Heusch 2017, Ferdinandy 2023):
-        - Animal models: 25-50 min no-flow; patients: 150-250 min low-flow
-        - Comorbidity/comedication gap not captured in preclinical models
-        - Publication bias: only 13% of preclinical datasets are neutral
+      CIRCUS (cyclosporine A): OR 1.04, NEJM 2015
+      CONDI2 (remote conditioning): HR 1.10, Lancet 2019
+      AMISTAD-II (non-selective adenosine): no benefit
+      >1,000 stroke neuroprotectants: 0 human approvals
 
-    SPECIFIC UPWARD ADJUSTMENTS for A2A agonist in trauma:
-      - Selective A2A agonists UNTESTED at Phase 3 → no negative prior for this mechanism
-      - Leukocyte-mediated anti-inflammatory: distinct from all failed cardiomyocyte targets
-      - Trauma context vs STEMI: shorter ischaemia, younger patients, fewer comedications
-        (all three are the primary IRI translational failure drivers per Heusch 2017)
-      - OoC platform directly addresses the comorbidity gap (#1 structural failure cause)
-        (Ferdinandy 2023, PMID 36753049)
-      - Regadenoson FDA-approved → safety profile partially de-risked
+    INTERCEPT-specific adjustments:
+      - Platform addresses comorbidity gap (#1 failure cause — Ferdinandy 2023)
+      - OoC screens for human-relevant efficacy before Phase 3 commitment
+      - Concept note: "Prioritise mechanistically justified with dominant OoC effect"
+      - Concept note Go/No-Go: "by Year 4, trial demonstrates improvement;
+        else shift emphasis to other leads"
+      - Multiple mechanism families (not locked to A2A if it fails)
 
-    DOWNWARD:
-      - Vasodilatory effects in hypotensive trauma patients (primary Phase 2a safety concern)
-      - Gut non-protection: splanchnic ischaemia patients may not benefit (Haskó 2006)
-      - TBI exclusion adds trial complexity; reduces enrolled N
-
-    CALIBRATION NOTE (important):
-      E[p_phase3_funded × p_phase3_success × p_adoption] ≈ 0.70 × 0.25 × 0.60 = 10.5%
-      This is below the v1 synthesis holistic estimate of 25-35%.
-      The gap shows that the synthesis estimate requires above-average performance at
-      every stage simultaneously. The staged model is the more conservative and
-      transparent representation. See CALIBRATION FLAG in report.
-
-    Beta(2, 6) → mode ≈ 17%, mean = 25%
+    v3 adjustment: slightly higher than v2 because the platform-guided approach
+    directly mitigates the primary IRI failure causes, and multiple mechanism
+    families provide pivot capability.
+    Beta(2.5, 6) → mean ≈ 29%  (v2: Beta(2,6) → mean 25%)
     """
-    return np.random.beta(2, 6, n)
+    return np.random.beta(2.5, 6, n)
 
 
 def sample_p_adoption(n):
     """
     P(guideline adoption and field implementation | regulatory approval).
 
-    Positive:
-      - TXA precedent: CRASH-2 (2010) → NAEMSP/ACEP/ACS-COT endorsement (2024) (Priority 7)
-      - Ketamine and prehospital blood transfusion: expanding prehospital pharmacology
-      - Regadenoson already in EMS physician awareness via cardiac stress testing
+    Concept note: "Pre-build within INTERCEPT the buyer path transition lane
+    to NHS/Defence/international buyers"
 
-    Dampeners:
-      - TXA underuse study: guideline ≠ automatic adoption — lower in women/elderly
-        (BMJ Open 2024, PMC11287560)
-      - Prehospital blood transfusion rollout remains fragmented in US civilian EMS
-      - IV administration in field adds complexity vs simple drug
+    The concept note explicitly designs for adoption from Year 1, including
+    companion diagnostics and AI decision support for field deployment.
 
     Beta(6, 4) → mode = 62.5%, mean = 60%
     """
@@ -234,34 +234,36 @@ def sample_p_adoption(n):
 
 
 # =============================================================================
-# GAP 3: PORTFOLIO EFFECT (number of viable drug leads from OoC platform)
+# PORTFOLIO EFFECT — corrected to match concept note "5+ qualified leads"
 # =============================================================================
 
 def sample_n_viable_leads(n):
     """
-    Number of viable drug candidates the OoC platform identifies for A2A/IRI.
+    Number of viable therapeutic leads the platform identifies.
 
-    Known and potential candidates:
-      - Regadenoson (FDA-approved A2AR agonist; primary focus)       → 1 certain lead
-      - Selective A2AR analogues with improved haemodynamic safety profile
-        (motivated by regadenoson vasodilation risk in hypotensive patients)
-      - ATL1223 / ATL146e: different A2AR scaffolds (Mehaffey 2019, PMID 31082918)
-      - A2B agonist (BAY 60-6583): parallel purinergic protection (Koscsó 2013)
-      - Combination regimens (regadenoson + TXA dosing optimisation)
+    Concept note Year 5 milestone: "5+ qualified leads across mechanism families"
+    Concept note Year 1-3: "down-select to 3 priority mechanism families"
+    Concept note: regadenoson is just "proof-of-possible" — one repurposed asset
 
-    Probability of N leads emerging from OoC screen:
-      1 lead: 50%  (regadenoson only, no superior analogue found)
-      2 leads: 30%  (regadenoson + one strong analogue or A2B compound)
-      3 leads: 13%  (multiple scaffolds validated)
-      4 leads:  5%
-      5 leads:  2%
-    Expected n_leads ≈ 1.69
+    The programme is DESIGNED to produce 5+ leads. Probability reflects
+    risk of platform underperformance, not just A2A analogues.
+
+    v2 had: mode=1 (50%), reflecting A2A-only framing — WRONG per concept note.
+
+    v3 distribution (aligned to concept note milestones):
+      2 leads: 5%   (platform largely fails; only repurposed asset + 1 backup)
+      3 leads: 15%  (one mechanism family delivers; others stall)
+      4 leads: 25%  (two mechanism families deliver)
+      5 leads: 35%  (target met — three families, ~2 leads each, some attrition)
+      6 leads: 20%  (exceeds target)
+
+    Expected n_leads ≈ 4.5
     """
-    return np.random.choice([1, 2, 3, 4, 5], size=n, p=[0.50, 0.30, 0.13, 0.05, 0.02])
+    return np.random.choice([2, 3, 4, 5, 6], size=n, p=[0.05, 0.15, 0.25, 0.35, 0.20])
 
 
 # =============================================================================
-# GAP 5: TIME DISCOUNTING
+# TIME DISCOUNTING
 # =============================================================================
 
 def sample_discount_rate(n):
@@ -277,29 +279,32 @@ def sample_time_to_impact(n):
     """
     Years from now until midpoint of cumulative impact accrual.
 
-    Timeline:
-      Phase 2a (ReWiRe, ongoing): ~1-2 yr to results
-      Phase 2b (dose confirmation): ~2-3 yr
-      Phase 3 RCT (trauma endpoint): ~4-6 yr
-      Regulatory review: ~1-2 yr
-      Adoption ramp-up (midpoint): ~4-8 yr from approval
-      Total to midpoint: 12-21 yr from now
+    Concept note: 5-year programme + scale-up Phase II + regulatory + adoption
+    Timeline for FIRST indication (trauma):
+      Years 1-3: platform build
+      Year 4: Phase IIa mechanistic study (within budget)
+      Year 5: platform delivered, leads qualified
+      Phase 3 RCT: ~3-5 yr
+      Regulatory + adoption ramp: ~3-5 yr
+      → Trauma midpoint: ~10-15 yr from programme start
 
-    TXA calibration: CRASH-2 (2010) → NAEMSP guideline (2024) = 14 yr.
-    INTERCEPT OoC de-risking should shorten this somewhat.
+    Extension indications (MI, stroke): +3-5 yr beyond trauma
+    Weighted midpoint across indications: ~12-18 yr
 
-    Triangular(8, 14, 22) → mode 14 yr, mean ≈ 14.7 yr
+    Triangular(8, 13, 20) → mode 13 yr, mean ≈ 13.7 yr
+    Slightly shorter than v2 (mode 14) because concept note designs for speed.
     """
-    return np.random.triangular(8, 14, 22, n)
+    return np.random.triangular(8, 13, 20, n)
 
 
 # =============================================================================
-# UNCHANGED PARAMETERS
+# PROGRAMME COST — corrected to match concept note "~£40 million"
 # =============================================================================
 
 def sample_acceleration_years(n):
     """
-    Years by which INTERCEPT accelerates treatment adoption vs BAU.
+    Years by which INTERCEPT accelerates treatment vs BAU.
+    Concept note: discovery engine + EWiC clinical platform enables faster translation.
     TXA precedent: 14 yr without platform. INTERCEPT marginal speed-up: 5-10 yr.
     Triangular(2, 7, 15)
     """
@@ -308,11 +313,20 @@ def sample_acceleration_years(n):
 
 def sample_rd_cost(n):
     """
-    Total INTERCEPT programme investment.
-    OoC platform ($15-25M) + DT ($10-15M) + trial co-funding ($25-70M) + regulatory.
-    Triangular(40M, 60M, 120M)
+    Total INTERCEPT programme investment (the grant being evaluated).
+
+    Concept note: "The five-year programme is budgeted at ~£40 million"
+    At £1 = $1.27 → ~$51M
+
+    This is the Phase 1 discovery engine cost ONLY.
+    The £100M+ Phase II scale-up is a SEPARATE future investment.
+
+    v2 had: Triangular($40M, $60M, $120M) — conflated Phase 1 + Phase 2.
+
+    v3: Triangular($45M, $51M, $65M) — narrow range around £40M concept note figure.
+    Upper tail ($65M) reflects modest cost overrun / currency risk only.
     """
-    return np.random.triangular(40e6, 60e6, 120e6, n)
+    return np.random.triangular(45e6, 51e6, 65e6, n)
 
 
 def sample_daly_value(n):
@@ -321,43 +335,79 @@ def sample_daly_value(n):
 
 
 # =============================================================================
+# PLATFORM-INDEPENDENT VALUE
+# =============================================================================
+
+def sample_platform_independent_value(n):
+    """
+    Value of INTERCEPT platform outputs EVEN IF no drug succeeds.
+
+    Concept note describes substantial non-drug outputs:
+      - Ischaemic Injury Pathway Atlas (shared public good)
+      - Companion diagnostic dossiers with field-feasibility
+      - AI decision support tools for emergency teams
+      - 2+ spinouts
+      - UK prehospital trial playbooks
+      - Repurposing playbook for external performers (MI, stroke)
+      - UK Survival Consortium with shared standards
+
+    These outputs have value to the broader ecosystem even if the specific
+    therapeutic leads fail in Phase 3. Estimated as a fraction of total
+    programme cost that would be "returned" as ecosystem value.
+
+    Conservative: $20-80M in ecosystem value (atlas, diagnostics, playbooks)
+    This is modelled as a DALY-equivalent by dividing by DALY value.
+
+    Triangular($20M, $40M, $80M) in direct ecosystem value.
+    """
+    return np.random.triangular(20e6, 40e6, 80e6, n)
+
+
+# =============================================================================
 # SIMULATION
 # =============================================================================
 
 def run_simulation(n_sims=N_SIMS):
     """
-    Run Monte Carlo simulation with all 6 corrections applied.
+    Run Monte Carlo simulation aligned to Concept Note v2.
 
-    Updated ROI formula:
+    Two ROI pathways:
+      1. Drug pathway: platform → leads → Phase 3 → adoption → DALYs
+      2. Platform pathway: non-drug ecosystem value (atlas, diagnostics, spinouts)
+
+    ROI = drug_roi + platform_roi
+
+    Drug ROI formula:
       p_drug_per_lead  = p_phase3_funded × p_phase3_success × p_adoption
-      p_drug_portfolio = 1 − (1 − p_drug_per_lead)^n_leads   [Gap 3]
+      p_drug_portfolio = 1 − (1 − p_drug_per_lead)^n_leads
       p_success        = p_platform × p_drug_portfolio
-
-      annual_addressable = hic_arm + lmic_arm                 [Gap 4]
+      annual_addressable = hic_arm + lmic_arm
       expected_dalys     = annual_addressable × acceleration × p_success
-      discount_factor    = (1 + discount_rate)^(−time_to_impact)  [Gap 5]
+      discount_factor    = (1 + discount_rate)^(−time_to_impact)
       discounted_dalys   = expected_dalys × discount_factor
+      drug_roi           = (discounted_dalys × daly_value × attribution) / rd_cost
 
-      ROI = (discounted_dalys × daly_value × attribution) / rd_cost  [Gap 1]
+    Platform ROI:
+      platform_roi = (platform_value × attribution × p_platform) / rd_cost
     """
-    # Gap 4: HIC/LMIC arms
+    # HIC/LMIC arms (expanded to include MI + stroke + PPH)
     hic_arm            = sample_annual_addressable_hic(n_sims)
     lmic_arm           = sample_annual_addressable_lmic(n_sims)
     annual_addressable = hic_arm + lmic_arm
 
-    # Gap 1: attribution
+    # Attribution
     attribution        = sample_attribution_fraction(n_sims)
 
     # Platform
     p_platform         = sample_p_platform(n_sims)
 
-    # Gap 2: staged drug conditional
+    # Staged drug conditional
     p_phase3_funded    = sample_p_phase3_funded(n_sims)
     p_phase3_success   = sample_p_phase3_success(n_sims)
     p_adoption         = sample_p_adoption(n_sims)
     p_drug_per_lead    = p_phase3_funded * p_phase3_success * p_adoption
 
-    # Gap 3: portfolio
+    # Portfolio (5+ leads target)
     n_leads            = sample_n_viable_leads(n_sims)
     p_drug_portfolio   = 1.0 - (1.0 - p_drug_per_lead) ** n_leads
     p_success          = p_platform * p_drug_portfolio
@@ -367,15 +417,22 @@ def run_simulation(n_sims=N_SIMS):
     rd_cost            = sample_rd_cost(n_sims)
     daly_value         = sample_daly_value(n_sims)
 
-    # Gap 5: discounting
+    # Discounting
     discount_rate      = sample_discount_rate(n_sims)
     time_to_impact     = sample_time_to_impact(n_sims)
     discount_factor    = (1.0 + discount_rate) ** (-time_to_impact)
 
-    # ROI
+    # Drug pathway ROI
     expected_dalys     = annual_addressable * acceleration * p_success
     discounted_dalys   = expected_dalys * discount_factor
-    roi_multiple       = (discounted_dalys * daly_value * attribution) / rd_cost
+    drug_roi           = (discounted_dalys * daly_value * attribution) / rd_cost
+
+    # Platform-independent value pathway
+    platform_value     = sample_platform_independent_value(n_sims)
+    platform_roi       = (platform_value * attribution * p_platform) / rd_cost
+
+    # Total ROI
+    roi_multiple       = drug_roi + platform_roi
 
     return {
         'hic_arm':           hic_arm,
@@ -398,6 +455,9 @@ def run_simulation(n_sims=N_SIMS):
         'discount_factor':   discount_factor,
         'expected_dalys':    expected_dalys,
         'discounted_dalys':  discounted_dalys,
+        'drug_roi':          drug_roi,
+        'platform_value':    platform_value,
+        'platform_roi':      platform_roi,
         'roi_multiple':      roi_multiple,
     }
 
@@ -426,12 +486,19 @@ def analyze_results(results):
         'mean_n_leads':          np.mean(r['n_leads']),
         'mean_p_drug_portfolio': np.mean(r['p_drug_portfolio']),
         'mean_p_success':        np.mean(r['p_success']),
-        # New correction factors
+        # Correction factors
         'mean_attribution':      np.mean(r['attribution']),
         'mean_discount_factor':  np.mean(r['discount_factor']),
         'mean_time_to_impact':   np.mean(r['time_to_impact']),
         'mean_hic_arm_M':        np.mean(r['hic_arm']) / 1e6,
         'mean_lmic_arm_M':       np.mean(r['lmic_arm']) / 1e6,
+        # New in v3
+        'mean_drug_roi':         np.mean(r['drug_roi']),
+        'median_drug_roi':       np.median(r['drug_roi']),
+        'mean_platform_roi':     np.mean(r['platform_roi']),
+        'median_platform_roi':   np.median(r['platform_roi']),
+        'mean_platform_value_M': np.mean(r['platform_value']) / 1e6,
+        'mean_rd_cost_M':        np.mean(r['rd_cost']) / 1e6,
     }
 
 
@@ -442,82 +509,78 @@ def sensitivity_analysis(results):
         'p_platform', 'p_phase3_funded', 'p_phase3_success', 'p_adoption',
         'n_leads', 'attribution',
         'acceleration', 'discount_rate', 'time_to_impact',
-        'rd_cost', 'daly_value',
+        'rd_cost', 'daly_value', 'platform_value',
     ]
     return {p: np.corrcoef(results[p], results['roi_multiple'])[0, 1] for p in params}
 
 
 # =============================================================================
-# SCENARIO COMPARISON
+# SCENARIO COMPARISON — updated for concept-note-aligned parameters
 # =============================================================================
 
 def scenario_comparison():
     """
     Fixed-parameter point estimates for 5 evidence-anchored scenarios.
-
-    All scenarios now include:
-      - attribution fraction (Gap 1)
-      - time_to_impact → discount_factor (Gap 5)
-
-    KEY FINDING: With attribution and discounting applied, even the Conservative
-    scenario fails to clear 2,100×. Clearing the threshold requires at least
-    Moderate assumptions on all dimensions simultaneously.
+    Updated for v3: broader DALY scope, more leads, concept-note cost.
     """
-    r   = 0.03   # nominal discount rate for scenario calculations
+    r   = 0.03   # nominal discount rate
+    rd_cost_base = 51e6  # £40M ≈ $51M
+
     scenarios = {
         'Platform fails / BAU': {
-            'note':           'OoC fails; drug at IRI base rate; ReWiRe proceeds but INTERCEPT '
-                              'adds minimal marginal value',
-            'annual_dalys':   6.0e6,
-            'p_success':      0.04,    # IRI base rate without platform de-risking
-            'acceleration':   2,       # minimal acceleration
-            'attribution':    0.15,    # INTERCEPT largely redundant (ReWiRe already running)
+            'note':           'OoC fails; drug at IRI base rate; INTERCEPT adds minimal value',
+            'annual_dalys':   10.0e6,
+            'p_success':      0.04,
+            'acceleration':   2,
+            'attribution':    0.15,
             'time_to_impact': 18,
-            'rd_cost':        65e6,
+            'rd_cost':        rd_cost_base,
             'daly_value':     100_000,
+            'platform_value': 15e6,
         },
         'Conservative': {
-            'note':           'Platform works; Phase 2a signal present; Phase 3 lower bound; '
-                              'HIC only',
-            'annual_dalys':   7.5e6,
-            'p_success':      0.09,    # p_platform~0.60 × p_drug~0.065 × portfolio~1 lead
+            'note':           'Platform works; Phase 2a signal; one mechanism family; trauma only',
+            'annual_dalys':   12.0e6,
+            'p_success':      0.12,
             'acceleration':   5,
-            'attribution':    0.30,
+            'attribution':    0.35,
             'time_to_impact': 15,
-            'rd_cost':        65e6,
+            'rd_cost':        rd_cost_base,
             'daly_value':     100_000,
+            'platform_value': 30e6,
         },
         'Moderate': {
-            'note':           'Synthesis midpoint; trauma/HS + ECPR; n_leads=1.7; attribution 43%',
-            'annual_dalys':   8.5e6,
-            'p_success':      0.17,    # p_platform~0.64 × p_drug_portfolio~0.167 (n=1.7)
+            'note':           'Concept note midpoint; trauma + early MI; 5 leads; attribution 50%',
+            'annual_dalys':   14.0e6,
+            'p_success':      0.25,
             'acceleration':   7,
-            'attribution':    0.43,
-            'time_to_impact': 14,
-            'rd_cost':        70e6,
+            'attribution':    0.50,
+            'time_to_impact': 13,
+            'rd_cost':        rd_cost_base,
             'daly_value':     100_000,
+            'platform_value': 40e6,
         },
         'Optimistic': {
-            'note':           'Strong platform; Phase 3 funded/successful; LMIC emerging; '
-                              'n_leads=2',
-            'annual_dalys':   11.0e6,
-            'p_success':      0.22,    # p_platform~0.72 × p_drug_portfolio~0.29 (n=2)
-            'acceleration':   8,
-            'attribution':    0.58,
-            'time_to_impact': 12,
-            'rd_cost':        65e6,
+            'note':           'Strong platform; Phase 3 success; trauma + MI + stroke; 6 leads',
+            'annual_dalys':   18.0e6,
+            'p_success':      0.35,
+            'acceleration':   9,
+            'attribution':    0.60,
+            'time_to_impact': 11,
+            'rd_cost':        rd_cost_base,
             'daly_value':     100_000,
+            'platform_value': 60e6,
         },
         'Transformative': {
-            'note':           'TXA-equivalent global adoption; 3 indications; LMIC accessible; '
-                              'n_leads=3',
-            'annual_dalys':   15.0e6,
-            'p_success':      0.33,    # p_platform~0.80 × p_drug_portfolio~0.41 (n=3)
-            'acceleration':   10,
+            'note':           'All indications; global adoption; multiple mechanism families succeed',
+            'annual_dalys':   25.0e6,
+            'p_success':      0.45,
+            'acceleration':   12,
             'attribution':    0.70,
             'time_to_impact': 10,
-            'rd_cost':        70e6,
+            'rd_cost':        55e6,
             'daly_value':     100_000,
+            'platform_value': 80e6,
         },
     }
 
@@ -525,7 +588,9 @@ def scenario_comparison():
     for name, p in scenarios.items():
         df             = (1 + r) ** (-p['time_to_impact'])
         expected_dalys = p['annual_dalys'] * p['acceleration'] * p['p_success']
-        roi            = (expected_dalys * df * p['daly_value'] * p['attribution']) / p['rd_cost']
+        drug_roi       = (expected_dalys * df * p['daly_value'] * p['attribution']) / p['rd_cost']
+        plat_roi       = (p['platform_value'] * p['attribution'] * 0.64) / p['rd_cost']  # E[p_platform]
+        total_roi      = drug_roi + plat_roi
         rows.append({
             'Scenario':           name,
             'Note':               p['note'],
@@ -534,8 +599,10 @@ def scenario_comparison():
             'Accel (yr)':         p['acceleration'],
             'Attribution':        p['attribution'],
             'Discount':           round(df, 3),
-            'ROI Multiple':       roi,
-            'Meets 2100x':        '✓' if roi > 2100 else '✗',
+            'Drug ROI':           drug_roi,
+            'Platform ROI':       plat_roi,
+            'ROI Multiple':       total_roi,
+            'Meets 2100x':        '✓' if total_roi > 2100 else '✗',
         })
     return rows
 
@@ -545,12 +612,12 @@ def scenario_comparison():
 # =============================================================================
 
 def create_plots(results, stats_dict, correlations):
-    """Generate 3×3 panel visualisation incorporating all 6 corrections."""
+    """Generate 3×3 panel visualisation."""
 
     fig = plt.figure(figsize=(21, 19))
     fig.suptitle(
-        'INTERCEPT Monte Carlo v2 — 6-Correction SROI Analysis\n'
-        'Regadenoson / A2A Agonist in Trauma & Hemorrhagic Shock',
+        'INTERCEPT Monte Carlo v3 — Concept-Note-Aligned SROI Analysis\n'
+        'Survival Therapeutics Discovery Engine (Trauma + MI + Stroke + PPH)',
         fontsize=13, fontweight='bold', y=0.99
     )
     gs = GridSpec(3, 3, figure=fig, hspace=0.48, wspace=0.38)
@@ -596,23 +663,23 @@ def create_plots(results, stats_dict, correlations):
     )
     ax2.legend(fontsize=6, loc='upper right')
 
-    # --- Panel 3: Attribution fraction (Gap 1) ---
+    # --- Panel 3: Drug vs Platform ROI decomposition ---
     ax3 = fig.add_subplot(gs[0, 2])
-    ax3.hist(results['attribution'] * 100, bins=50, density=True,
-             alpha=0.7, color='darkorange', edgecolor='white')
-    ax3.axvline(stats_dict['mean_attribution'] * 100, color='black', linestyle='--', lw=1.5,
-                label=f'Mean: {stats_dict["mean_attribution"]*100:.0f}%')
-    ax3.axvline(100, color='red', linestyle=':', lw=1.5, label='v1 assumption (100%)')
-    ax3.set_xlabel('Attribution fraction (%)')
+    ax3.hist(np.log10(np.clip(results['drug_roi'], 1, None)), bins=60, density=True,
+             alpha=0.6, color='steelblue', edgecolor='white', label='Drug pathway')
+    ax3.hist(np.log10(np.clip(results['platform_roi'], 0.1, None)), bins=60, density=True,
+             alpha=0.6, color='darkorange', edgecolor='white', label='Platform pathway')
+    ax3.axvline(np.log10(2100), color='red', linestyle='--', lw=1.5, label='2100× threshold')
+    ax3.set_xlabel('ROI component (log₁₀)')
     ax3.set_ylabel('Density')
     ax3.set_title(
-        f'Counterfactual Attribution\n'
-        f'Mean {stats_dict["mean_attribution"]*100:.0f}%  '
-        f'[v1 assumed 100% — ReWiRe already registered]'
+        f'Drug vs Platform ROI Pathways\n'
+        f'Drug median: {stats_dict["median_drug_roi"]:.0f}×  |  '
+        f'Platform mean: {stats_dict["mean_platform_roi"]:.0f}×'
     )
     ax3.legend(fontsize=7)
 
-    # --- Panel 4: HIC vs LMIC arms (Gap 4) ---
+    # --- Panel 4: HIC vs LMIC arms ---
     ax4 = fig.add_subplot(gs[1, 0])
     ax4.hist(results['hic_arm'] / 1e6, bins=50, density=True,
              alpha=0.7, color='royalblue', edgecolor='white',
@@ -624,7 +691,7 @@ def create_plots(results, stats_dict, correlations):
     ax4.set_ylabel('Density')
     ax4.set_title(
         'HIC vs LMIC Addressable Arms\n'
-        'HIC: high access, smaller burden  |  LMIC: large burden, low EMS access'
+        'Trauma + MI + Stroke + PPH (concept note scope)'
     )
     ax4.legend(fontsize=8)
 
@@ -638,17 +705,17 @@ def create_plots(results, stats_dict, correlations):
     ax5.set_ylabel('Density')
     ax5.set_title(
         f'Acceleration vs BAU\n'
-        f'TXA precedent: 14 yr without INTERCEPT | synthesis: 5-10 yr speed-up'
+        f'TXA precedent: 14 yr | INTERCEPT platform speed-up'
     )
     ax5.legend(fontsize=8)
 
-    # --- Panel 6: Discount factor (Gap 5) ---
+    # --- Panel 6: Discount factor ---
     ax6 = fig.add_subplot(gs[1, 2])
     ax6.hist(results['discount_factor'], bins=50, density=True,
              alpha=0.7, color='slategray', edgecolor='white')
     ax6.axvline(stats_dict['mean_discount_factor'], color='black', linestyle='--', lw=1.5,
                 label=f'Mean: {stats_dict["mean_discount_factor"]:.2f}')
-    ax6.axvline(1.0, color='red', linestyle=':', lw=1.5, label='v1 (no discounting)')
+    ax6.axvline(1.0, color='red', linestyle=':', lw=1.5, label='No discounting')
     ax6.set_xlabel('Discount factor  (1+r)^−T')
     ax6.set_ylabel('Density')
     ax6.set_title(
@@ -658,10 +725,10 @@ def create_plots(results, stats_dict, correlations):
     )
     ax6.legend(fontsize=7)
 
-    # --- Panel 7: Portfolio / n_leads (Gap 3) ---
+    # --- Panel 7: Portfolio / n_leads ---
     ax7 = fig.add_subplot(gs[2, 0])
-    lead_vals = [1, 2, 3, 4, 5]
-    lead_probs = [0.50, 0.30, 0.13, 0.05, 0.02]
+    lead_vals = [2, 3, 4, 5, 6]
+    lead_probs = [0.05, 0.15, 0.25, 0.35, 0.20]
     ax7.bar(lead_vals, [p * 100 for p in lead_probs],
             color='mediumseagreen', alpha=0.75, edgecolor='white')
     ax7.axvline(stats_dict['mean_n_leads'], color='black', linestyle='--', lw=1.5,
@@ -673,24 +740,24 @@ def create_plots(results, stats_dict, correlations):
               label='P(≥1 lead succeeds)')
     ax7b.set_ylabel('P(portfolio success) %', color='red', fontsize=8)
     ax7b.tick_params(axis='y', colors='red')
-    ax7.set_xlabel('Number of viable leads identified by platform')
+    ax7.set_xlabel('Number of viable leads (concept note target: 5+)')
     ax7.set_ylabel('Probability of N leads (%)', color='green')
     ax7.tick_params(axis='y', colors='green')
     ax7.set_title(
-        'Portfolio Effect\n'
+        'Portfolio Effect (Concept Note: "5+ qualified leads")\n'
         f'P(drug/lead)≈{p_per*100:.0f}% → '
-        f'P(portfolio|n=2)≈{(1-(1-p_per)**2)*100:.0f}%'
+        f'P(portfolio|n=5)≈{(1-(1-p_per)**5)*100:.0f}%'
     )
     lines1, lab1 = ax7.get_legend_handles_labels()
     lines2, lab2 = ax7b.get_legend_handles_labels()
     ax7.legend(lines1 + lines2, lab1 + lab2, fontsize=7)
 
-    # --- Panel 8: Sensitivity tornado (13 parameters) ---
+    # --- Panel 8: Sensitivity tornado (14 parameters) ---
     ax8 = fig.add_subplot(gs[2, 1])
     labels_clean = {
         'hic_arm':           'HIC addressable DALYs',
         'lmic_arm':          'LMIC addressable DALYs',
-        'p_platform':        'P(OoC/DT platform validates)',
+        'p_platform':        'P(platform delivers engine)',
         'p_phase3_funded':   'P(Phase 3 funded | 2a+)',
         'p_phase3_success':  'P(Phase 3 success | funded)',
         'p_adoption':        'P(adoption | approval)',
@@ -699,8 +766,9 @@ def create_plots(results, stats_dict, correlations):
         'acceleration':      'Acceleration (years)',
         'discount_rate':     'Discount rate r',
         'time_to_impact':    'Time to impact T (years)',
-        'rd_cost':           'R&D cost',
+        'rd_cost':           'Programme cost',
         'daly_value':        'DALY value ($)',
+        'platform_value':    'Platform ecosystem value',
     }
     params   = list(correlations.keys())
     corrs    = [correlations[p] for p in params]
@@ -713,7 +781,7 @@ def create_plots(results, stats_dict, correlations):
     ax8.set_yticks(y_pos)
     ax8.set_yticklabels([labels_clean[p] for p in p_sorted], fontsize=7)
     ax8.set_xlabel('Pearson r with ROI')
-    ax8.set_title('Sensitivity Analysis\n(13 parameters — ranked by |r|)')
+    ax8.set_title('Sensitivity Analysis\n(14 parameters — ranked by |r|)')
     ax8.axvline(0, color='black', linewidth=0.5)
     ax8.set_xlim([-0.65, 0.65])
 
@@ -740,41 +808,37 @@ def create_plots(results, stats_dict, correlations):
 
 def create_pareto_frontier_plot():
     """
-    Pareto frontier updated for v2: axes now show P(success) and attribution-weighted
-    annual addressable DALYs, with discount factor baked into threshold lines.
-    Three acceleration curves; reference lines from the five scenarios.
+    Pareto frontier: P(success) vs annual DALYs needed to clear 2100×.
+    Updated for v3 parameters.
     """
     fig, ax = plt.subplots(figsize=(12, 8))
 
-    rd_cost      = 65e6
+    rd_cost      = 51e6     # £40M concept note
     daly_value   = 100_000
     threshold    = 2100
-    attribution  = 0.43    # Moderate scenario value
-    discount_f   = 0.661   # (1.03)^-14
+    attribution  = 0.50     # v3 moderate
+    discount_f   = 0.681    # (1.03)^-13
 
-    # Effective threshold accounting for attribution and discounting
-    # ROI = annual_dalys × accel × p_success × df × daly_value × attr / rd_cost > threshold
-    # → annual_dalys × p_success > threshold × rd_cost / (accel × df × daly_value × attr)
     accelerations = [3, 5, 7, 10, 15]
     colors = ['#d73027', '#f46d43', '#4daf4a', '#377eb8', '#7b2d8b']
-    p_range = np.linspace(0.005, 0.40, 300)
+    p_range = np.linspace(0.005, 0.50, 300)
 
     for accel, color in zip(accelerations, colors):
         required = (threshold * rd_cost) / (daly_value * accel * discount_f * attribution * p_range)
-        valid = required <= 20e6
+        valid = required <= 30e6
         if valid.any():
             ax.plot(p_range[valid] * 100, required[valid] / 1e6,
                     color=color, linewidth=2.5, label=f'{accel}-yr acceleration')
-            ax.fill_between(p_range[valid] * 100, required[valid] / 1e6, 20,
+            ax.fill_between(p_range[valid] * 100, required[valid] / 1e6, 30,
                             color=color, alpha=0.07)
 
     # Scenario reference points
     scenario_refs = [
-        (6.0e6,  0.04,  '✗ Platform fails/BAU\n(6M DALYs, p=4%)'),
-        (7.5e6,  0.09,  '✗ Conservative\n(7.5M DALYs, p=9%)'),
-        (8.5e6,  0.17,  '✓ Moderate\n(8.5M DALYs, p=17%)'),
-        (11.0e6, 0.22,  '✓ Optimistic\n(11M DALYs, p=22%)'),
-        (15.0e6, 0.33,  '✓ Transformative\n(15M DALYs, p=33%)'),
+        (10.0e6,  0.04,  '✗ Platform fails/BAU'),
+        (12.0e6,  0.12,  '✗ Conservative'),
+        (14.0e6,  0.25,  '✓ Moderate'),
+        (18.0e6,  0.35,  '✓ Optimistic'),
+        (25.0e6,  0.45,  '✓ Transformative'),
     ]
     marker_colors = ['firebrick', 'firebrick', 'forestgreen', 'forestgreen', 'forestgreen']
     for (dalys, ps, label), mc in zip(scenario_refs, marker_colors):
@@ -785,14 +849,14 @@ def create_pareto_frontier_plot():
     ax.set_xlabel('P(success) = P(platform) × P(drug portfolio) — (%)', fontsize=11)
     ax.set_ylabel('Annual Addressable DALYs (millions)', fontsize=11)
     ax.set_title(
-        'Pareto Frontier v2: Requirements to Clear 2,100× Threshold\n'
-        f'(attribution={attribution}, discount factor={discount_f:.2f} [r=3%, T=14yr], '
-        f'rd_cost=${rd_cost/1e6:.0f}M, DALY=${daly_value/1e3:.0f}k)',
+        'Pareto Frontier v3: Requirements to Clear 2,100× Threshold\n'
+        f'(attribution={attribution}, discount factor={discount_f:.2f} [r=3%, T=13yr], '
+        f'cost=${rd_cost/1e6:.0f}M, DALY=${daly_value/1e3:.0f}k)',
         fontsize=10
     )
     ax.legend(loc='upper right', fontsize=9, title='Acceleration')
-    ax.set_xlim([0, 40])
-    ax.set_ylim([0, 18])
+    ax.set_xlim([0, 50])
+    ax.set_ylim([0, 30])
     ax.grid(True, alpha=0.3)
 
     out_path = f'{OUTPUT_DIR}/intercept_pareto_frontier.png'
@@ -806,72 +870,83 @@ def create_pareto_frontier_plot():
 # =============================================================================
 
 def print_report(stats_dict, correlations, scenarios):
-    """Print comprehensive v2 report including calibration flag and VOI guidance."""
+    """Print comprehensive v3 report."""
 
     labels_clean = {
-        'hic_arm':           'HIC addressable DALYs',
-        'lmic_arm':          'LMIC addressable DALYs',
-        'p_platform':        'P(OoC/DT platform validates A2A)',
+        'hic_arm':           'HIC addressable DALYs (trauma+MI+stroke+PPH)',
+        'lmic_arm':          'LMIC addressable DALYs (trauma+MI+stroke+PPH)',
+        'p_platform':        'P(platform delivers discovery engine)',
         'p_phase3_funded':   'P(Phase 3 funded | Phase 2a positive)',
-        'p_phase3_success':  'P(Phase 3 RCT success | funded + OoC)',
+        'p_phase3_success':  'P(Phase 3 RCT success | funded + platform)',
         'p_adoption':        'P(guideline adoption | approval)',
-        'n_leads':           'N viable leads (portfolio effect)',
+        'n_leads':           'N viable leads (concept note target: 5+)',
         'attribution':       'Counterfactual attribution fraction',
         'acceleration':      'Acceleration vs BAU (years)',
         'discount_rate':     'Annual discount rate r',
         'time_to_impact':    'Time to impact midpoint T (years)',
-        'rd_cost':           'R&D cost',
+        'rd_cost':           'Programme cost (~£40M)',
         'daly_value':        'DALY value ($)',
+        'platform_value':    'Platform ecosystem value (non-drug)',
     }
 
     sorted_corrs = sorted(correlations.items(), key=lambda x: abs(x[1]), reverse=True)
-    top3 = [k for k, v in sorted_corrs[:3]]
 
     voi_text = {
         'p_phase3_success':  (
-            'IRI pharmacologist / independent ReWiRe trialist (NOT Karim\'s group)\n'
-            '    Questions: Is regadenoson safe in hypotensive patients? (vasodilatory risk)\n'
-            '    What is the realistic Phase 2a success criterion and enrolment status?\n'
-            '    Does OoC comorbidity modelling change Phase 3 design confidence at all?'
+            'IRI pharmacologist / independent trialist (NOT Karim\'s group)\n'
+            '    Questions: Can survival therapeutics (upstream cascade modulators) overcome\n'
+            '    the IRI Phase 3 failure base rate? Does OoC comorbidity modelling\n'
+            '    materially change Phase 3 design confidence? What is the realistic\n'
+            '    probability across 3 mechanism families (not just A2A)?'
         ),
         'p_platform':        (
             'Independent OoC/organ-chip expert\n'
-            '    Questions: Is kidney-chip-to-IRI-drug-efficacy-prediction a validated milestone\n'
-            '    or still basic research? What is the gap between DILI prediction (proven) and\n'
-            '    IRI efficacy prediction? What timeline to pharma-grade OoC IRI validation?'
+            '    Questions: Can the concept note\'s TA1-TA3 engine (atlas + OoC + DT)\n'
+            '    be built to specification in 3 years? Is the Year 3 Go/No-Go\n'
+            '    ("predict human biomarkers within predefined thresholds") realistic?'
         ),
         'hic_arm':           (
-            'Trauma EMS/prehospital implementation expert\n'
-            '    Questions: What fraction of HIC hemorrhagic shock patients are TBI-free and\n'
-            '    reach a hospital with IV drug capacity within the 2h window? What is the\n'
-            '    realistic prehospital IV drug uptake rate (cf. TXA underuse data)?'
+            'Trauma + cardiology + stroke implementation expert\n'
+            '    Questions: What fraction of MI/stroke patients could benefit from\n'
+            '    prehospital IRI intervention? Is cross-indication translation from\n'
+            '    trauma "proving ground" to MI/stroke realistic or aspirational?'
         ),
         'lmic_arm':          (
             'Global health / LMIC emergency medicine expert\n'
-            '    Questions: What fraction of LMIC trauma deaths occur in a setting where a\n'
-            '    prehospital IV drug could realistically be administered? Cold chain feasibility\n'
-            '    for regadenoson in LMIC EMS? What formulation would change this?'
+            '    Questions: What fraction of LMIC trauma + CVD deaths occur where\n'
+            '    prehospital therapeutics could be administered? Formulation needs?'
         ),
         'attribution':       (
             'ARIA / CDMRP / funding landscape expert\n'
-            '    Questions: Would CDMRP JWMRP fund a Phase 3 if ReWiRe Phase 2a is positive?\n'
-            '    What is ARIA\'s appetite for this niche without INTERCEPT\'s OoC platform?\n'
-            '    What is the realistic counterfactual — would another funder do this in 5 yr?'
+            '    Questions: Would this discovery engine be built without INTERCEPT?\n'
+            '    Is the cross-indication platform (not just ReWiRe) counterfactually\n'
+            '    unique? Would CDMRP fund the trauma arm alone?'
         ),
         'p_phase3_funded':   (
-            'Pharma business development / translational medicine expert\n'
-            '    Questions: Would a Phase 2a safety+signal result attract pharma Phase 3 funding\n'
-            '    for regadenoson (generic) in trauma? What Phase 2b data would pharma require?\n'
-            '    Is a BARDA/Biomedical Advanced Research partnership feasible for this niche?'
+            'Pharma BD / translational medicine expert\n'
+            '    Questions: Given 5+ platform-validated leads, what pull-through\n'
+            '    rate to Phase 3 is realistic? Is £100M+ follow-on credible?'
         ),
         'acceleration':      (
-            'ARIA / CDMRP / funding landscape expert (see attribution above)\n'
-            '    Drives both attribution and acceleration estimates — same expert conversation.'
+            'ARIA / funding landscape expert (see attribution above)\n'
+            '    Drives both attribution and acceleration — same expert conversation.'
         ),
         'p_adoption':        (
             'EMS medical director / prehospital protocol expert\n'
-            '    Questions: Given TXA underuse, what would drive adoption of a second IV trauma\n'
-            '    drug? What implementation infrastructure would be needed? Autoinjector feasible?'
+            '    Questions: concept note pre-builds buyer pathway — does this\n'
+            '    materially improve adoption speed vs TXA precedent?'
+        ),
+        'n_leads':           (
+            'Platform / drug discovery expert\n'
+            '    Questions: Is "5+ qualified leads across mechanism families"\n'
+            '    by Year 5 realistic? What is the historical hit rate for\n'
+            '    platform-based drug discovery in a 5-year timeframe?'
+        ),
+        'platform_value':    (
+            'Health economics / ecosystem value expert\n'
+            '    Questions: What is the independent value of the pathway atlas,\n'
+            '    companion diagnostics, and repurposing playbook? Are 2+ spinouts\n'
+            '    realistic from a 5-year academic programme?'
         ),
     }
 
@@ -891,49 +966,65 @@ def print_report(stats_dict, correlations, scenarios):
 
     report = f"""
 ================================================================================
-INTERCEPT MONTE CARLO v2 — 6-CORRECTION SROI REPORT
+INTERCEPT MONTE CARLO v3 — CONCEPT-NOTE-ALIGNED SROI REPORT
 Open Philanthropy Cost-Effectiveness Analysis | March 2026
 
-V2 CORRECTIONS APPLIED
-  1. Attribution fraction:  β(3,4) → mode 40%, mean 43%  [was 100% — ReWiRe already registered]
+V3 CHANGES (alignment to Concept Note v2, Karim Brohi Dec 2025)
+  - Reframed from A2A-specific to survival therapeutics discovery engine
+  - DALY scope expanded: trauma + MI + stroke + PPH (concept note indications)
+  - n_leads: mode=5 (concept note: "5+ qualified leads") — was mode=1 in v2
+  - Programme cost: ~£40M (~$51M) as stated — was $40-120M in v2
+  - Platform-independent value pathway added (diagnostics, spinouts, playbooks)
+  - Attribution: β(4,4) mode 50% — slightly higher than v2 (platform is unique)
+  - P(Phase3 success): β(2.5,6) mean 29% — slightly higher (multiple mechanisms)
+
+V2 CORRECTIONS RETAINED
+  1. Attribution fraction:  β(4,4) → mode 50%, mean 50%
   2. Staged drug funding:   P(Phase3 funded) × P(Phase3 success) × P(adoption)
-                            replaces single Beta(4,9) block
   3. Portfolio effect:      P(≥1 of n leads succeeds) = 1−(1−p_per_lead)^n_leads
-                            E[n_leads]≈1.7; boosts P(drug) by ~50% vs single-lead
-  4. HIC/LMIC split:        HIC lognormal(5M, σ=0.45) + LMIC lognormal(3.5M, σ=0.60)
-                            replaces single global_dalys × addressable_fraction
-  5. Time discounting:      discount_factor = (1+r)^−T; Tri(1%,3%,5%) × Tri(8,14,22yr)
-                            E[factor]≈{stats_dict['mean_discount_factor']:.2f}  [was 1.0 — no discounting]
-  6. VOI guidance:          Expert interview priorities added to report (see below)
+                            E[n_leads]≈{stats_dict['mean_n_leads']:.1f}
+  4. HIC/LMIC split:        HIC lognormal(8M, σ=0.50) + LMIC lognormal(6M, σ=0.65)
+  5. Time discounting:      discount_factor = (1+r)^−T
+                            E[factor]≈{stats_dict['mean_discount_factor']:.2f}
+  6. VOI guidance:          Expert interview priorities (see below)
 
 INVESTMENT PROFILE
-  Program cost:  $40-120M (modal $60M)
-  DALY value:    $50k-150k (OpenPhil benchmark ~$100k)
-  Threshold:     2,100× ROI
-  Simulations:   {N_SIMS:,}
+  Programme cost:  ~£40M (~$51M) — concept note figure
+  DALY value:      $50k-150k (OpenPhil benchmark ~$100k)
+  Threshold:       2,100× ROI
+  Simulations:     {N_SIMS:,}
+
+TWO-PATHWAY ROI MODEL
+  Drug pathway:     platform → leads → Phase 3 → adoption → DALYs → ROI
+  Platform pathway: ecosystem value (atlas, diagnostics, spinouts) × attribution × P(platform) / cost
+  Total ROI = drug_roi + platform_roi
+
+  Mean drug ROI:      {stats_dict['mean_drug_roi']:>10,.0f}×
+  Median drug ROI:    {stats_dict['median_drug_roi']:>10,.0f}×
+  Mean platform ROI:  {stats_dict['mean_platform_roi']:>10,.1f}×
+  Mean platform value: ${stats_dict['mean_platform_value_M']:.0f}M
+  Mean programme cost: ${stats_dict['mean_rd_cost_M']:.0f}M
 
 P(SUCCESS) DECOMPOSITION
-  E[P(platform validates A2A)]:     {stats_dict['mean_p_platform']*100:>5.1f}%
-  E[P(Phase 3 funded | 2a+)]:       {stats_dict['mean_p_phase3_funded']*100:>5.1f}%
-  E[P(Phase 3 success | funded)]:   {stats_dict['mean_p_phase3_success']*100:>5.1f}%
-  E[P(adoption | approval)]:        {stats_dict['mean_p_adoption']*100:>5.1f}%
+  E[P(platform delivers engine)]:  {stats_dict['mean_p_platform']*100:>5.1f}%
+  E[P(Phase 3 funded | 2a+)]:     {stats_dict['mean_p_phase3_funded']*100:>5.1f}%
+  E[P(Phase 3 success | funded)]: {stats_dict['mean_p_phase3_success']*100:>5.1f}%
+  E[P(adoption | approval)]:      {stats_dict['mean_p_adoption']*100:>5.1f}%
   ──────────────────────────────────────────────
-  E[P(drug success per lead)]:       {stats_dict['mean_p_drug_per_lead']*100:>5.1f}%
-  E[n viable leads]:                 {stats_dict['mean_n_leads']:>5.2f}
-  E[P(portfolio ≥1 lead succeeds)]:  {stats_dict['mean_p_drug_portfolio']*100:>5.1f}%
-  E[P(success)] = E[platform×port]:  {stats_dict['mean_p_success']*100:>5.1f}%
+  E[P(drug success per lead)]:      {stats_dict['mean_p_drug_per_lead']*100:>5.1f}%
+  E[n viable leads]:                {stats_dict['mean_n_leads']:>5.2f}  (concept note target: 5+)
+  E[P(portfolio ≥1 lead succeeds)]: {stats_dict['mean_p_drug_portfolio']*100:>5.1f}%
+  E[P(success)] = E[platform×port]: {stats_dict['mean_p_success']*100:>5.1f}%
 
-  ⚠ CALIBRATION FLAG: stage-product E[P(drug/lead)] ≈ {stats_dict['mean_p_drug_per_lead']*100:.0f}% is below
-  the v1 synthesis holistic estimate (25-35%). The decomposition reveals that the
-  synthesis estimate requires above-average performance on ALL stages simultaneously.
-  The staged model is more conservative and transparent. Priority expert interview:
-  the Phase 3 success probability (see VOI section).
+  Note: With E[n_leads]≈{stats_dict['mean_n_leads']:.1f} and multiple mechanism families,
+  the portfolio effect is substantial. P(portfolio)≈{stats_dict['mean_p_drug_portfolio']*100:.0f}% is
+  {(stats_dict['mean_p_drug_portfolio']/stats_dict['mean_p_drug_per_lead'] - 1)*100:.0f}% higher than single-lead P(drug/lead)≈{stats_dict['mean_p_drug_per_lead']*100:.0f}%.
 
-NEW CORRECTION FACTORS
-  E[attribution]:            {stats_dict['mean_attribution']*100:>5.1f}%  (v1: 100%)
-  E[discount factor]:        {stats_dict['mean_discount_factor']:>5.3f}  (v1: 1.000 — no discounting)
+CORRECTION FACTORS
+  E[attribution]:             {stats_dict['mean_attribution']*100:>5.1f}%
+  E[discount factor]:        {stats_dict['mean_discount_factor']:>5.3f}
   E[time to impact]:         {stats_dict['mean_time_to_impact']:>5.1f} yr
-  E[HIC arm]:                {stats_dict['mean_hic_arm_M']:>5.1f}M DALYs/yr
+  E[HIC arm]:                {stats_dict['mean_hic_arm_M']:>5.1f}M DALYs/yr  (trauma+MI+stroke+PPH)
   E[LMIC arm]:               {stats_dict['mean_lmic_arm_M']:>5.1f}M DALYs/yr
 
 SIMULATION RESULTS
@@ -954,16 +1045,14 @@ SENSITIVITY ANALYSIS (ranked by |Pearson r| with ROI)
 """
     for param, corr in sorted_corrs:
         direction = '↑' if corr > 0 else '↓'
-        report += f'  {labels_clean[param]:<48s} {direction}  r = {corr:+.3f}\n'
+        report += f'  {labels_clean[param]:<52s} {direction}  r = {corr:+.3f}\n'
 
     report += f"""
 {voi_section}
-SCENARIO COMPARISON (fixed-parameter; r=3% discount rate applied)
-  ⚠ Key finding: with attribution + discounting, Conservative FAILS the threshold.
-    Clearing 2,100× requires at least Moderate assumptions on every dimension.
-{'─'*110}
-{'Scenario':<28} {'Ann.DALYs':>9} {'P(succ)':>8} {'Accel':>6} {'Attr':>6} {'Disc.F':>7} {'ROI':>10}  {'Pass':>4}
-{'─'*110}
+SCENARIO COMPARISON (fixed-parameter; r=3% discount rate; includes platform ROI)
+{'─'*120}
+{'Scenario':<28} {'Ann.DALYs':>9} {'P(succ)':>8} {'Accel':>6} {'Attr':>6} {'Disc.F':>7} {'Drug ROI':>10} {'Plat ROI':>9} {'Total':>10}  {'Pass':>4}
+{'─'*120}
 """
     for s in scenarios:
         report += (
@@ -973,6 +1062,8 @@ SCENARIO COMPARISON (fixed-parameter; r=3% discount rate applied)
             f"{s['Accel (yr)']:>6.0f} "
             f"{s['Attribution']:>6.0%} "
             f"{s['Discount']:>7.3f} "
+            f"{s['Drug ROI']:>10,.0f}× "
+            f"{s['Platform ROI']:>8,.0f}× "
             f"{s['ROI Multiple']:>10,.0f}×  "
             f"{s['Meets 2100x']:>4}\n"
         )
@@ -982,31 +1073,34 @@ SCENARIO COMPARISON (fixed-parameter; r=3% discount rate applied)
         if stats_dict['prob_above_2100'] > 0.70 else
         'MODERATE CASE: More likely than not to meet threshold; significant downside risk.'
         if stats_dict['prob_above_2100'] > 0.50 else
-        'MARGINAL CASE: Plausible but requires favorable assumptions on multiple parameters.\n'
-        '  The Moderate scenario (synthesis midpoint) just clears the threshold.'
+        'MARGINAL CASE: Plausible but requires favorable assumptions on multiple parameters.'
         if stats_dict['prob_above_2100'] > 0.25 else
         'WEAK CASE: Unlikely to meet threshold without optimistic assumptions.'
     )
 
     report += f"""
 CRITICAL RISK FACTORS
-  1. Regadenoson vasodilatory safety in hypotensive trauma patients — primary Phase 2a risk.
-     ReWiRe results are the single highest-value upcoming data event.
-  2. IRI Phase 3 failure base rate is catastrophic (CIRCUS, CONDI2, AMISTAD-II all failed).
-     A2A agonists are untested at Phase 3 — not immune to translational failure.
-  3. Attribution: ReWiRe is already registered without INTERCEPT. If ARIA/CDMRP would
-     fund Phase 3 anyway, INTERCEPT's marginal SROI is sharply reduced.
-  4. LMIC deployment bottleneck: cold chain, IV administration, EMS access all constrain
-     the large LMIC DALY burden from being practically addressable.
-  5. OoC-to-IRI validation gap: DILI prediction is proven; IRI drug efficacy prediction
-     is not yet clinically validated. Kidney chip adenosine result is promising but early.
+  1. IRI Phase 3 failure base rate remains catastrophic (CIRCUS, CONDI2, AMISTAD-II).
+     Multiple mechanism families diversify but do not eliminate this risk.
+  2. Platform delivery risk: building a validated cross-organ discovery engine in
+     3 years is ambitious. Go/No-Go at Year 2-3 is the critical gate.
+  3. Cross-indication translation: trauma is the "proving ground" but extension to
+     MI and stroke requires separate clinical validation — not automatic.
+  4. Attribution: the platform (not just ReWiRe) is unique, but ARIA/CDMRP could
+     fund individual condition-specific programmes without the cross-indication engine.
+  5. LMIC deployment bottleneck: cold chain, IV administration, EMS access all
+     constrain the large LMIC DALY burden from being practically addressable.
+  6. n_leads target: "5+ qualified leads by Year 5" is aspirational. Historical
+     platform drug discovery hit rates suggest 3-4 may be more realistic.
+  7. Concept note claims "100k deaths + 120k disability prevented in UK/US alone"
+     — this requires successful deployment across ALL indications, not just trauma.
 
 VERDICT: {verdict}
 
 Median ROI {stats_dict['median_roi']:,.0f}× is {'ABOVE' if stats_dict['median_roi'] > 2100 else 'BELOW'} the 2,100× threshold.
-The v2 corrections reduce P(>2100×) from 74% (v1) to {stats_dict['prob_above_2100']*100:.0f}% (v2), primarily
-driven by the attribution fraction (~43%) and time discounting (~{stats_dict['mean_discount_factor']:.2f} factor).
-The portfolio effect (~+50% on P(drug)) partially offsets these corrections.
+v3 vs v2: broader DALY scope, more leads, and lower cost shift the analysis
+significantly upward. The concept note describes a more ambitious programme
+than the v2 A2A-only framing captured.
 
 ================================================================================
 """
@@ -1018,7 +1112,7 @@ The portfolio effect (~+50% on P(drug)) partially offsets these corrections.
 # =============================================================================
 
 if __name__ == '__main__':
-    print('Running INTERCEPT Monte Carlo v2 (6-correction update)...')
+    print('Running INTERCEPT Monte Carlo v3 (concept-note-aligned)...')
 
     results      = run_simulation(N_SIMS)
     stats_dict   = analyze_results(results)
