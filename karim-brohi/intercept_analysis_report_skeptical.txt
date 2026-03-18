@@ -1,0 +1,130 @@
+
+================================================================================
+INTERCEPT MONTE CARLO — SKEPTICAL ANALYST VERSION
+Open Philanthropy Cost-Effectiveness Analysis | March 2026
+
+PURPOSE
+  This version implements conservative priors a rigorous external analyst would apply
+  when the primary input source is the applicant's own concept note. Compare with
+  intercept_analysis_report.txt (v3, applicant-aligned) for the full range.
+
+SKEPTICAL PRIORS vs v3 (applicant-aligned)
+  Parameter                    Skeptical              v3 (applicant)
+  ─────────────────────────────────────────────────────────────────
+  Annual addressable DALYs     ~6.5M (trauma only)   ~16.5M (all indications)
+  N viable leads (E[n])        ~1.95 (peaked at 1)    4.5 (peaked at 5)
+  Attribution (mean)           ~25%                   50%
+  P(Phase 3 success, mean)     ~18%                   29%
+  P(platform, mean)            ~50%                   64%
+  Discount rate (mode)          5%                     3%
+  Time to impact (mode)        16 yr                  13 yr
+  Acceleration (mode)           4 yr                   7 yr
+  Platform ecosystem value     $15M modal             $40M modal
+
+INVESTMENT PROFILE
+  Programme cost:  ~£40M (~$51M) — concept note figure (unchanged)
+  DALY value:      $50k-150k (unchanged)
+  Threshold:       2,100× ROI
+  Simulations:     100,000
+
+P(SUCCESS) DECOMPOSITION — SKEPTICAL
+  E[P(platform delivers engine)]:    50.0%  (v3: 63.6%)
+  E[P(Phase 3 funded | 2a+)]:       55.5%  (v3: 69.9%)
+  E[P(Phase 3 success | funded)]:   17.6%  (v3: 29.4%)
+  E[P(adoption | approval)]:        44.5%  (v3: 60.0%)
+  ──────────────────────────────────────────────
+  E[P(drug success per lead)]:         4.3%  (v3: 12.3%)
+  E[n viable leads]:                  1.95  (v3: 4.50)
+  E[P(portfolio ≥1 lead succeeds)]:    8.0%  (v3: 41.0%)
+  E[P(success)] = E[platform×port]:    4.0%  (v3: 26.1%)
+
+CORRECTION FACTORS — SKEPTICAL
+  E[attribution]:               25.0%  (v3: 50.0%)
+  E[discount factor]:          0.445  (v3: 0.673)
+  E[time to impact]:            17.0 yr  (v3: 13.7yr)
+  E[HIC arm]:                    4.4M DALYs/yr  (v3: 9.1M — trauma+MI+stroke+PPH)
+  E[LMIC arm]:                   3.0M DALYs/yr  (v3: 7.4M)
+
+SIMULATION RESULTS
+  Mean ROI:                     310×
+  Median ROI:                   129×
+  5th percentile:                 8×
+  25th percentile:               45×
+  75th percentile:              338×
+  95th percentile:            1,192×
+
+  ── v3 (applicant-aligned) for comparison ──
+  v3 median ROI:               14,957×
+  v3 mean ROI:                 21,714×
+
+THRESHOLD EXCEEDANCE
+  P(ROI > 1,000×):       6.6%  (v3: 99.1%)
+  P(ROI > 2,100×):       1.6%  (v3: 96.4%)  ← OpenPhil bar
+  P(ROI > 5,000×):       0.2%  (v3: 85.3%)
+  P(ROI > 10,000×):      0.0%  (v3: 65.7%)
+
+SENSITIVITY ANALYSIS (ranked by |Pearson r|)
+  P(Phase 3 success | funded)                          ↑  r = +0.370
+  Counterfactual attribution (~25%)                    ↑  r = +0.325
+  N viable leads (peaked at 1-2)                       ↑  r = +0.257
+  Acceleration vs BAU (conservative)                   ↑  r = +0.205
+  P(adoption | approval)                               ↑  r = +0.187
+  P(platform delivers engine)                          ↑  r = +0.164
+  HIC DALYs (trauma/HS only)                           ↑  r = +0.159
+  P(Phase 3 funded | Phase 2a+)                        ↑  r = +0.148
+  LMIC DALYs (trauma/HS only)                          ↑  r = +0.137
+  DALY value ($)                                       ↑  r = +0.106
+  Time to impact T (yrs)                               ↓  r = -0.084
+  Discount rate r (5%)                                 ↓  r = -0.071
+  Programme cost (~£40M)                               ↓  r = -0.041
+  Platform ecosystem value (conservative)              ↓  r = -0.001
+
+
+EXPERT INTERVIEW PRIORITIES (Value of Information)
+
+  1. [P(Phase 3 success | funded)  r=+0.370]
+     Independent IRI pharmacologist
+    Key question: has ANY OoC platform ever improved Phase 3 success
+    probability for an IRI drug? If not, what is the prior for OoC credit?
+
+  2. [Counterfactual attribution (~25%)  r=+0.325]
+     Funding landscape analyst
+    Key question: which components of INTERCEPT would NOT be funded
+    independently? What is the specific integration value?
+
+  3. [N viable leads (peaked at 1-2)  r=+0.257]
+     Academic drug discovery platform expert
+    Key question: what is the historical IND-ready lead output of
+    comparable 5-year academic platform programmes?
+
+
+SCENARIO COMPARISON (r=5% skeptical discount rate)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Scenario                     Ann.DALYs  P(succ)  Accel   Attr  Disc.F   Drug ROI  Plat ROI      Total  Pass
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Platform fails / BAU             5.0M       2%      1    10%   0.377          7×        0×          7×     ✗
+Conservative                     5.5M       5%      3    20%   0.416        134×        0×        134×     ✗
+Moderate                         7.0M      10%      4    25%   0.458        629×        0×        629×     ✗
+Optimistic                       9.0M      18%      6    35%   0.505      3,369×        0×      3,369×     ✓
+Transformative                  14.0M      28%      8    45%   0.557     15,408×        0×     15,408×     ✓
+
+WHAT WOULD CHANGE THIS VERDICT
+  The gap between skeptical (2%) and applicant-aligned (96%)
+  is driven by four parameters. Resolving any two would substantially shift the verdict:
+
+  1. n_leads: independent evidence that 5-yr platform programmes produce 5+ IND-ready
+     leads (not just leads at earlier stages) would shift this toward v3.
+  2. Indication scope: Phase 2a positive results in MI/stroke during Year 4-5 would
+     justify including those DALYs — currently unearned.
+  3. Attribution: evidence that the cross-indication integration could NOT be funded
+     independently (i.e., the components would NOT be funded without INTERCEPT) would
+     raise attribution toward 40-50%.
+  4. P(Phase 3 success): any OoC platform demonstrating a correct IRI drug efficacy
+     prediction (positive or negative) would calibrate the credit OoC deserves.
+
+VERDICT: WEAK CASE under skeptical priors: does not clear threshold without
+  significant evidence update on platform performance and indication scope.
+
+Median ROI 129× is BELOW the 2,100× threshold under skeptical priors.
+
+================================================================================
